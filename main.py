@@ -1,8 +1,10 @@
 import random
+import numpy as np
+import matplotlib.pyplot as plt
 
 
 def generate_maze(n):
-    maze = [[0 for j in range(n)] for i in range(n)]
+    maze = np.zeros((n, n), dtype=int)
     visited = [[False for j in range(n)] for i in range(n)]
     stack = []
 
@@ -65,9 +67,18 @@ def generate_maze(n):
     return maze
 
 
-n = 101
-maze = generate_maze(n)
-sourceFile = open('maze.txt', 'w')
-for row in maze:
-    print(row, file=sourceFile)
-sourceFile.close()
+# Generate 50 mazes with size 101x101
+mazes = [generate_maze(101) for i in range(50)]
+
+# Store the mazes in a numpy array
+mazes = np.array(mazes)
+
+# Visualize the first maze
+plt.imshow(mazes[0], cmap='binary')
+plt.show()
+
+
+# sourceFile = open('maze.txt', 'w')
+# for row in maze:
+#     print(row, file=sourceFile)
+# sourceFile.close()

@@ -76,9 +76,3 @@ mazes = np.array(mazes)
 # Visualize the first maze
 plt.imshow(mazes[0], cmap='binary')
 plt.show()
-
-
-# sourceFile = open('maze.txt', 'w')
-# for row in maze:
-#     print(row, file=sourceFile)
-# sourceFile.close()

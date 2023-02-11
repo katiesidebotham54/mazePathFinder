@@ -67,12 +67,19 @@ def generate_maze(n):
     return maze
 
 
+n = 101
 # Generate 50 mazes with size 101x101
-mazes = [generate_maze(101) for i in range(50)]
+maze = generate_maze(n)
 
-# Store the mazes in a numpy array
-mazes = np.array(mazes)
+# # Store the mazes in a numpy array
+# mazes = np.array(mazes)
+
+
+for i in range(n):
+    for j in range(n):
+        print(maze[i][j])
+
 
 # Visualize the first maze
-plt.imshow(mazes[0], cmap='binary')
+plt.imshow(maze, cmap='binary')
 plt.show()

@@ -74,12 +74,6 @@ maze = generate_maze(n)
 # # Store the mazes in a numpy array
 # mazes = np.array(mazes)
 
-
-for i in range(n):
-    for j in range(n):
-        print(maze[i][j])
-
-
 # Visualize the first maze
 plt.imshow(maze, cmap='binary')
 plt.show()

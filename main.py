@@ -66,7 +66,6 @@ def generate_maze(n):
 
     return maze
 
-
 n = 101
 # Generate 50 mazes with size 101x101
 maze = generate_maze(n)
@@ -75,5 +74,5 @@ maze = generate_maze(n)
 # mazes = np.array(mazes)
 
 # Visualize the first maze
-plt.imshow(maze, cmap='binary')
-plt.show()
+# plt.imshow(maze, cmap='binary')
+# plt.show()

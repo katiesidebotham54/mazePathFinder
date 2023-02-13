@@ -36,29 +36,29 @@ def a_star():
     counter += 1
     while OPEN_LIST:
         # identify s with smallest f-value
-        s_curr = heappop(OPEN_LIST)[1]
-        print("item popped" + s_curr)
-        # remove it from open list
-        OPEN_LIST.remove(s_curr)
+        curr_s = heappop(OPEN_LIST)
+        print(f"s_curr: {curr_s}")
         # add to close list
-        CLOSED_LIST.add(s_curr)
+        CLOSED_LIST.add(curr_s)
         for a in actions:
             # look at neighboring state
-            succ_s = succ(s_curr, a)
+            succ_s = succ(curr_s, a)
+            print(f"succ_s: {succ_s}")
             # means that it's blocked
             if not succ_s:
                 # set f-value to infinity
                 f_scores[succ_s] = float("inf")
                 # add to closed list, AKA visited
                 CLOSED_LIST.add(succ_s)
+                continue
             # if the g-value of succ_s has not been initialized yet
             if search[succ_s] < counter:
                 # initialize value to infinity
                 g_scores[succ_s] = float("inf")
                 search[succ_s] = counter
-            if g_scores[succ_s] > g_scores[s_curr] + 1:
+            if g_scores[succ_s] > g_scores[curr_s] + 1:
                 h_scores[succ_s] = calc_h(succ_s, s_goal)
-                g_scores[succ_s] = g_scores[s_curr] + 1
+                g_scores[succ_s] = g_scores[curr_s] + 1
                 f_scores[succ_s] = g_scores[succ_s] + h_scores[succ_s]
                 if (f_scores[succ_s], succ_s) in OPEN_LIST:
                     OPEN_LIST.remove((f_scores[succ_s], succ_s))
@@ -69,21 +69,29 @@ def a_star():
 def succ(curr_s, a):
     for i in range(n):
         for j in range(n):
-            if a == "up" and i > 0 and GRID[i-1][j] == 0:
+            print("i: " + str(i))
+            if a == "up" and i != 0 and GRID[i-1][j] == 0:
                 succ_s = state(
-                    curr_s, (curr_s.position[0]-1, curr_s.position[1]))
+                    curr_s, (curr_s[1].position[0]-1, curr_s[1].position[1]))
+                print("checking up neighbor")
+                return succ_s
             elif a == "down" and i < n-1 and GRID[i+1][j] == 0:
                 succ_s = state(
-                    curr_s, (curr_s.position[0]+1, curr_s.position[1]))
+                    curr_s, (curr_s[1].position[0]+1, curr_s[1].position[1]))
+                print("checking down neighbor")
+                return succ_s
             elif a == "left" and j > 0 and GRID[i][j-1] == 0:
                 succ_s = state(
-                    curr_s, (curr_s.position[0], curr_s.position[1] - 1))
-            elif j < n-1 and GRID[i][j+1] == 0:
+                    curr_s, (curr_s[1].position[0], curr_s[1].position[1] - 1))
+                print("checking left neighbor")
+                return succ_s
+            elif a == "right" and j < n-1 and GRID[i][j+1] == 0:
                 succ_s = state(
-                    curr_s, (curr_s.position[0], curr_s.position[1] + 1))
-            else:
-                return None
-    return succ_s
+                    curr_s, (curr_s[1].position[0], curr_s[1].position[1] + 1))
+                print("checking right neighbor")
+                return succ_s
+
+    return None
 
 
 def calc_h(curr_s, goal):
@@ -107,8 +115,6 @@ def main():
     OPEN_LIST.clear()
     CLOSED_LIST.clear()
     heappush(OPEN_LIST, (0, s_start))
-    for element in OPEN_LIST:
-        print(element)
     print("running a star")
     a_star()
     if not OPEN_LIST:

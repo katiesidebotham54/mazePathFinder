@@ -9,8 +9,6 @@ class state():
         self.parent = parent
         self.position = position
 
-maze = main.generate_maze(n)
-
 pathdict = {"state0": state(None, (0,0))}
 
 for x in range(1, n, 1):
@@ -21,6 +19,15 @@ path = np.zeros((n,n), dtype = int)
 for x in pathdict.values():
 	path[x.position[0]][x.position[1]] = 1
 
-plt.imshow(maze, alpha = .5, cmap = 'binary', color = red)
-plt.imshow(path, alpha = .5, cmap = 'binary')
+#MatPlotLib Experimentation
+
+#Maze
+plt.imshow(main.generate_maze(n), alpha = .75, cmap = 'binary')
+
+#Masks all 0 values in the path to make only the actual path visible
+path = np.ma.masked_where(path == 0, path)
+
+#Path
+plt.imshow(path, alpha = 1, cmap = 'autumn')
+
 plt.show()

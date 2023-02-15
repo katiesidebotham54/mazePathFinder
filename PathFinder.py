@@ -1,7 +1,10 @@
 from heapq import heappush, heappop
 import main
+import random
+import numpy as np
+import matplotlib.pyplot as plt
 
-# Global variables
+
 # each g value is initially 1
 g_scores = {}
 h_scores = {}
@@ -30,20 +33,37 @@ class state():
         self.parent = parent
         self.position = position
 
+    def __hash__(self):
+        return hash((self.parent, self.position))
 
-def a_star():
-    global counter
-    counter += 1
+    def __eq__(self, other):
+        if isinstance(other, state):
+            return self.parent == other.parent and self.position == other.position
+        return False
+
+
+def a_star(start_s, goal_s, GRID):
+    g_scores[start_s] = 0
+    for i in g_scores:
+        print("g_value: " + str(g_scores[i]) + " this is i: " + str(i))
+        print("************************")
     while OPEN_LIST:
         # identify s with smallest f-value
         curr_s = heappop(OPEN_LIST)
+        for i in g_scores:
+            if (i == curr_s):
+                print("there exists something that matches")
+        print("nothing is in there that matches")
         print(f"s_curr: {curr_s}")
+        if curr_s == goal_s:
+            break
         # add to close list
         CLOSED_LIST.add(curr_s)
         for a in actions:
             # look at neighboring state
             succ_s = succ(curr_s, a)
-            print(f"succ_s: {succ_s}")
+            if succ_s in CLOSED_LIST:
+                continue
             # means that it's blocked
             if not succ_s:
                 # set f-value to infinity
@@ -51,43 +71,42 @@ def a_star():
                 # add to closed list, AKA visited
                 CLOSED_LIST.add(succ_s)
                 continue
-            # if the g-value of succ_s has not been initialized yet
-            if search[succ_s] < counter:
-                # initialize value to infinity
-                g_scores[succ_s] = float("inf")
-                search[succ_s] = counter
-            if g_scores[succ_s] > g_scores[curr_s] + 1:
+            if hash(curr_s) in g_scores:
+                new_g = g_scores[hash(curr_s)] + 1
+            else:
+                print("its not here")
+            new_g = g_scores[hash(curr_s)] + 1
+            if g_scores[succ_s] == float("inf") or new_g < g_scores[succ_s]:
+                g_scores[succ_s] = new_g
                 h_scores[succ_s] = calc_h(succ_s, s_goal)
-                g_scores[succ_s] = g_scores[curr_s] + 1
                 f_scores[succ_s] = g_scores[succ_s] + h_scores[succ_s]
-                if (f_scores[succ_s], succ_s) in OPEN_LIST:
-                    OPEN_LIST.remove((f_scores[succ_s], succ_s))
                 heappush(OPEN_LIST, (f_scores[succ_s], succ_s))
 
 
 # function for generating successor state s based on action a
 def succ(curr_s, a):
+    x = curr_s[1].position[0]
+    y = curr_s[1].position[1]
     for i in range(n):
         for j in range(n):
-            print("i: " + str(i))
             if a == "up" and i != 0 and GRID[i-1][j] == 0:
                 succ_s = state(
-                    curr_s, (curr_s[1].position[0]-1, curr_s[1].position[1]))
+                    curr_s, (x-1, y))
                 print("checking up neighbor")
                 return succ_s
             elif a == "down" and i < n-1 and GRID[i+1][j] == 0:
                 succ_s = state(
-                    curr_s, (curr_s[1].position[0]+1, curr_s[1].position[1]))
+                    curr_s, (x+1, y))
                 print("checking down neighbor")
                 return succ_s
             elif a == "left" and j > 0 and GRID[i][j-1] == 0:
                 succ_s = state(
-                    curr_s, (curr_s[1].position[0], curr_s[1].position[1] - 1))
+                    curr_s, (x, y - 1))
                 print("checking left neighbor")
                 return succ_s
             elif a == "right" and j < n-1 and GRID[i][j+1] == 0:
                 succ_s = state(
-                    curr_s, (curr_s[1].position[0], curr_s[1].position[1] + 1))
+                    curr_s, (x, y + 1))
                 print("checking right neighbor")
                 return succ_s
 
@@ -101,14 +120,8 @@ def calc_h(curr_s, goal):
 
 def main():
     print("made it here")
-    counter = 0
     s_start = state(None, (0, 0))
-    s_goal = state(None, (40, 80))
-    # initialize before putting into open list
-    g_scores[s_start] = 0
-    # initialize start and goal states to counter (0)
-    search[s_start] = counter
-    search[s_goal] = counter
+    s_goal = state(None, (n-1, n-1))
     g_scores[s_goal] = float("inf")
 
     # initialize OPEN and CLOSED list
@@ -116,18 +129,24 @@ def main():
     CLOSED_LIST.clear()
     heappush(OPEN_LIST, (0, s_start))
     print("running a star")
-    a_star()
+    path, min_cost = a_star(s_start, s_goal, GRID)
     if not OPEN_LIST:
         print("I cannot reach the target.")
         return
     # go back up tree using parents until reach start state
-    path = []
     s = s_goal
     while s != s_start:
         path.append(s)
         s = s.parent
-    print("I reached the target.")
-    return path[::-1]  # Return reversed path
+    print("I reached the target and the min cost is: " + str(min_cost))
+    # Visualize the maze and path
+    fig, ax = plt.subplots()
+    ax.imshow(maze, cmap='binary')
+
+    for i, j in path:
+        ax.text(j, i, '.', ha='center', va='center', color='r', fontsize=10)
+
+    plt.show()
 
 
 if __name__ == "__main__":

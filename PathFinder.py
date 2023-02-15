@@ -48,7 +48,7 @@ class animated_path():
 		self.fig, self.ax = plt.subplots()
 
 	def animate(self, i):
-		if i == len(self.pathlist):
+		if i >= len(self.pathlist):
 			print( '.', end = '')
 		else:
 			self.path[self.pathlist[i].position[0]]\

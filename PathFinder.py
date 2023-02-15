@@ -16,8 +16,8 @@ OPEN_LIST = []
 CLOSED_LIST = set()
 # array of potential actions taken by state s on grid
 actions = ["up", "down", "left", "right"]
-n = 10
-GRID = main.maze
+n = 101
+GRID = main.generate_maze(n)
 pathlist = []
 counter = 0
 
@@ -75,8 +75,6 @@ def a_star(start_s, goal_s):
         curr_f, curr_s = heappop(OPEN_LIST)
         print("iteration: " + str(counter))
         print(f"s_curr: {curr_s.position}")
-        # found path from start to destination
-        pathlist.append(curr_s)
         if curr_s.equals(goal_s):
             path = []
             s = goal_s
@@ -87,6 +85,7 @@ def a_star(start_s, goal_s):
             return path, curr_s.g
         # add to close list
         CLOSED_LIST.add(curr_s)
+        pathlist.append(curr_s)
         # for each neighbor of current node
         for a in actions:
             succ_s = succ(curr_s, a)
@@ -146,7 +145,7 @@ def calc_h(a, b):
 
 def main():
     start_s = state(None, (0, 0), 0, 0)
-    goal_s = state(None, (4, 3), float('inf'), float('inf'))
+    goal_s = state(None, (100,100), float('inf'), float('inf'))
     # initialize OPEN and CLOSED list
     OPEN_LIST.clear()
     CLOSED_LIST.clear()
@@ -156,7 +155,6 @@ def main():
     exploration = animated_path(GRID, pathlist, "cool")
     exploration.start_animation()
     print("min cost: " + str(min_cost))
-
 
 if __name__ == "__main__":
     main()

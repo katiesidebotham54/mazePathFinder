@@ -39,29 +39,29 @@ class state():
 
 class animated_path():
 
-	def __init__(self, maze, pathlist, color):
-		self.maze = maze
-		self.path = np.zeros(maze.shape, dtype = int)
-		self.path = np.ma.masked_where(self.path == 0, self.path)
-		self.color = color
-		self.pathlist = pathlist
-		self.fig, self.ax = plt.subplots()
+    def __init__(self, maze, pathlist, color):
+        self.maze = maze
+        self.path = np.zeros(maze.shape, dtype = int)
+        self.path = np.ma.masked_where(self.path == 0, self.path)
+        self.color = color
+        self.pathlist = pathlist
+        self.fig, self.ax = plt.subplots()
 
-	def animate(self, i):
-		if i >= len(self.pathlist):
-			print( '.', end = '')
-		else:
-			self.path[self.pathlist[i].position[0]]\
-				[self.pathlist[i].position[1]] = 1
-			self.ax.clear()
-			plt.imshow(self.maze, alpha = 1, cmap = 'binary')
-			self.im = plt.imshow(self.path, alpha = 1, cmap = self.color, animated = True)
-			return self.im
+    def animate(self, i):
+        if i >= len(self.pathlist):
+            print('.', end = '')
+            return
+        else:
+            self.path[self.pathlist[i].position[0]][self.pathlist[i].position[1]] = 1
+            self.ax.clear()
+            plt.imshow(self.maze, alpha = 1, cmap = 'binary')
+            self.im = plt.imshow(self.path, alpha = 1, cmap = self.color, animated = True)
+            return self.im
 
-	def start_animation(self):
-		self.ani = animation.FuncAnimation(self.fig, self.animate, \
-			frames = len(self.path), interval = 50)
-		plt.show()
+    def start_animation(self, name):
+        ani = animation.FuncAnimation(self.fig, self.animate, frames = len(self.path), interval = 50)
+        plt.show()
+        # ani.save(name)
 
 
 def a_star(start_s, goal_s):
@@ -145,16 +145,17 @@ def calc_h(a, b):
 
 def main():
     start_s = state(None, (0, 0), 0, 0)
-    goal_s = state(None, (100,100), float('inf'), float('inf'))
+    goal_s = state(None, (10,10), float('inf'), float('inf'))
     # initialize OPEN and CLOSED list
     OPEN_LIST.clear()
     CLOSED_LIST.clear()
     path, min_cost = a_star(start_s, goal_s)
     print(path)
+    print("min cost: " + str(min_cost))
+
     # Visualize Traversal
     exploration = animated_path(GRID, pathlist, "cool")
-    exploration.start_animation()
-    print("min cost: " + str(min_cost))
+    exploration.start_animation("test.mp4")
 
 if __name__ == "__main__":
     main()

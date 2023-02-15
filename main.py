@@ -66,9 +66,9 @@ def generate_maze(n):
 
     return maze
 
-n = 101
-# Generate 50 mazes with size 101x101
-maze = generate_maze(n)
+# n = 101
+# # Generate 50 mazes with size 101x101
+# maze = generate_maze(n)
 
 # # Store the mazes in a numpy array
 # mazes = np.array(mazes)

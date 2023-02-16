@@ -59,7 +59,7 @@ class animated_path():
             return self.im
 
     def start_animation(self, name):
-        ani = animation.FuncAnimation(self.fig, self.animate, frames = len(self.path), interval = 50)
+        ani = animation.FuncAnimation(self.fig, self.animate, frames = len(self.path), interval = 1)
         plt.show()
         # ani.save(name)
 
@@ -75,6 +75,7 @@ def a_star(start_s, goal_s):
         curr_f, curr_s = heappop(OPEN_LIST)
         print("iteration: " + str(counter))
         print(f"s_curr: {curr_s.position}")
+        pathlist.append(curr_s)
         if curr_s.equals(goal_s):
             path = []
             s = goal_s
@@ -85,7 +86,6 @@ def a_star(start_s, goal_s):
             return path, curr_s.g
         # add to close list
         CLOSED_LIST.add(curr_s)
-        pathlist.append(curr_s)
         # for each neighbor of current node
         for a in actions:
             succ_s = succ(curr_s, a)
@@ -145,7 +145,7 @@ def calc_h(a, b):
 
 def main():
     start_s = state(None, (0, 0), 0, 0)
-    goal_s = state(None, (10,10), float('inf'), float('inf'))
+    goal_s = state(None, (100,100), float('inf'), float('inf'))
     # initialize OPEN and CLOSED list
     OPEN_LIST.clear()
     CLOSED_LIST.clear()

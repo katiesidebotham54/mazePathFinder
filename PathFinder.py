@@ -4,6 +4,7 @@ import random
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
+from IPython import display
 import time
 
 
@@ -16,7 +17,7 @@ OPEN_LIST = []
 CLOSED_LIST = set()
 # array of potential actions taken by state s on grid
 actions = ["up", "down", "left", "right"]
-n = 101
+n = 11
 GRID = main.generate_maze(n)
 pathlist = []
 counter = 0
@@ -39,30 +40,33 @@ class state():
 
 class animated_path():
 
-    def __init__(self, maze, pathlist, color):
+    def __init__(self, maze, pathlist):
         self.maze = maze
         self.path = np.zeros(maze.shape, dtype = int)
         self.path = np.ma.masked_where(self.path == 0, self.path)
-        self.color = color
+        self.term = np.zeros(maze.shape, dtype = int)
+        self.term = np.ma.masked_where(self.term == 0, self.term)
         self.pathlist = pathlist
         self.fig, self.ax = plt.subplots()
 
     def animate(self, i):
+
         if i >= len(self.pathlist):
             print('.', end = '')
             return
-        else:
-            self.path[self.pathlist[i].position[0]][self.pathlist[i].position[1]] = 1
-            self.ax.clear()
-            plt.imshow(self.maze, alpha = 1, cmap = 'binary')
-            self.im = plt.imshow(self.path, alpha = 1, cmap = self.color, animated = True)
-            return self.im
 
-    def start_animation(self, name):
-        ani = animation.FuncAnimation(self.fig, self.animate, frames = len(self.path), interval = 1)
+        elif i == (len(self.pathlist) - 1):
+            self.term[self.pathlist[i].position[0]][self.pathlist[i].position[1]] = 1
+
+        self.ax.clear() 
+        self.path[self.pathlist[i].position[0]][self.pathlist[i].position[1]] = 1
+        plt.imshow(self.maze, alpha = 1, cmap = 'binary')
+        plt.imshow(self.path, alpha = 1, cmap = 'cool')
+        plt.imshow(self.term, alpha = 1, cmap = 'spring')
+
+    def start_animation(self):
+        anim = animation.FuncAnimation(self.fig, self.animate, frames = len(self.path), interval = 1)
         plt.show()
-        # ani.save(name)
-
 
 def a_star(start_s, goal_s):
 
@@ -80,9 +84,10 @@ def a_star(start_s, goal_s):
             path = []
             s = goal_s
             while s is not None:
-                path.append(s.position)
+                path.append(s)
+                # print(s.parent)
                 s = s.parent
-                path.reverse()
+            path.reverse()  
             return path, curr_s.g
         # add to close list
         CLOSED_LIST.add(curr_s)
@@ -145,17 +150,21 @@ def calc_h(a, b):
 
 def main():
     start_s = state(None, (0, 0), 0, 0)
-    goal_s = state(None, (100,100), float('inf'), float('inf'))
+    goal_s = state(None, (2,3), float('inf'), float('inf'))
     # initialize OPEN and CLOSED list
     OPEN_LIST.clear()
     CLOSED_LIST.clear()
     path, min_cost = a_star(start_s, goal_s)
-    print(path)
+    print([s.position for s in path])
     print("min cost: " + str(min_cost))
 
     # Visualize Traversal
-    exploration = animated_path(GRID, pathlist, "cool")
-    exploration.start_animation("test.mp4")
+    exploration = animated_path(GRID, pathlist)
+    exploration.start_animation()
+
+    path_vis = animated_path(GRID, path)
+    path_vis.start_animation()
+
 
 if __name__ == "__main__":
     main()

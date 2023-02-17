@@ -2,10 +2,7 @@ from heapq import heappush, heappop
 import main
 import random
 import numpy as np
-import matplotlib.pyplot as plt
-import matplotlib.animation as animation
-from IPython import display
-import time
+import visualization
 
 
 start_s = None
@@ -15,7 +12,7 @@ goal_s = None
 OPEN_LIST = []
 # set that keeps track of all nodes that have already been visited --> put state s into list when expanding that node
 CLOSED_LIST = set()
-# List (not set) that mirrors closed_list in order to visualize when nodes are explored
+# List (not set) that mirrors closed_list in order to visualize when nodes are explored (added to CLOSED_LIST)
 clv_list = []
 # array of potential actions taken by state s on grid
 actions = ["up", "down", "left", "right"]
@@ -40,76 +37,6 @@ class state():
 
     def __lt__(self, other):
         return self.f < other.f
-
-
-class animated_path():
-
-    def __init__(self, maze, clv_list, pv_list, start_s, goal_s):
-
-        #Goal & Start States
-        self.goal_s = goal_s
-        self.start_s = start_s
-
-        #Layer 0: Start State Visualization
-        self.ssv = np.zeros(maze.shape, dtype = int)
-        self.ssv = np.ma.masked_where(self.ssv == 0, self.ssv)
-        self.ssv[self.start_s.position[0]][self.start_s.position[1]] = 1
-
-        #Layer 1: Maze (AKA GRID) Visualization
-        self.maze = maze
-
-        #Layer 2: Closed List Visualization
-        self.clv = np.zeros(maze.shape, dtype = int)
-        self.clv = np.ma.masked_where(self.clv == 0, self.clv)
-
-        #Layer 3: Path Visualization
-        self.pv = np.zeros(maze.shape, dtype = int)
-        self.pv = np.ma.masked_where(self.pv == 0, self.pv)
-
-        #Layer 4: Goal State Visualization
-        self.gsv = np.zeros(maze.shape, dtype = int)
-        self.gsv = np.ma.masked_where(self.gsv == 0, self.gsv)
-        self.gsv[self.goal_s.position[0]][self.goal_s.position[1]] = 1
-
-        #Closed List
-        self.clv_list = clv_list
-
-        #Path List
-        if pv_list:
-            self.pv_list = pv_list
-        else:
-            self.pv_list = []
-
-        #Figure & Axis Init
-        self.fig, self.ax = plt.subplots()
-
-    def animate(self, i):
-
-        self.ax.clear()
-
-        if i < len(self.clv_list):
-
-            self.clv[self.clv_list[i].position[0]][self.clv_list[i].position[1]] = 1 #Update clv with searched states
-
-        elif i - len(self.clv_list) < len(self.pv_list):
-
-            i -= len(self.clv_list) 
-            self.pv[self.pv_list[i].position[0]][self.pv_list[i].position[1]] = 1 #Update pv with path states
-
-        else:
-            print('.', end = '')
-            return
-
-        #Show All Layers
-        plt.imshow(self.maze, alpha = 1, cmap = 'Greys')
-        plt.imshow(self.clv, alpha = .5, cmap = 'tab20c')
-        plt.imshow(self.pv, alpha = .5, cmap = 'summer')
-        plt.imshow(self.ssv, alpha = .5, cmap = 'cool')
-        plt.imshow(self.gsv, alpha = .5, cmap = 'autumn')
-
-    def start_animation(self):
-        anim = animation.FuncAnimation(self.fig, self.animate, frames = len(self.clv_list) + len(self.pv_list), interval = 1)
-        plt.show()
 
 
 def a_star(start_s, goal_s):
@@ -204,8 +131,8 @@ def main():
     print("min cost: " + str(min_cost))
 
     ###Animation Call###
-    visualization = animated_path(GRID, clv_list, path, start_s, goal_s)
-    visualization.start_animation()
+    vis = visualization.animated_path(GRID, clv_list, path, start_s, goal_s)
+    vis.start_animation()
 
 
 if __name__ == "__main__":

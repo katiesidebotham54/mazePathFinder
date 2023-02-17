@@ -20,18 +20,21 @@ counter = 0
 
 
 class state():
-    def __init__(self, parent=None, position=None, g=None, h=None):
+    def __init__(self, parent=None, position=None):
         self.parent = parent
         self.position = position
-        self.g = g
-        self.h = h
+        self.g = float('inf')
+        self.h = float('inf')
         self.f = self.g + self.h
+
+    def __eq__(self, other):
+        return self.position == other.position
+
+    def __hash__(self):
+        return hash(self.position)
 
     def __lt__(self, other):
         return self.f < other.f
-
-    def equals(self, other):
-        return self.position == other.position
 
 
 def a_star(start_s, goal_s):
@@ -43,19 +46,13 @@ def a_star(start_s, goal_s):
         counter += 1
         # identify s with smallest f-value
         curr_f, curr_s = heappop(OPEN_LIST)
-        print("iteration: " + str(counter))
-        print(f"s_curr: {curr_s.position}")
-        # found path from start to destination
-        if curr_s.equals(goal_s):
-            path = []
-            s = goal_s
-            while s is not None:
-                path.append(s.position)
-                s = s.parent
-                path.reverse()
-            return path, curr_s.g
-        # add to close list
         CLOSED_LIST.add(curr_s)
+        print("iteration: " + str(counter))
+        print(f"s_curr: {curr_s}")
+        # found path from start to destination
+        if curr_s == goal_s:
+            print("curr is it!")
+            return create_path(curr_s)
         # for each neighbor of current node
         for a in actions:
             succ_s = succ(curr_s, a)
@@ -63,47 +60,57 @@ def a_star(start_s, goal_s):
             if succ_s is None:
                 continue
             else:
+                print(f"succ_s: {succ_s}")
+                print(f"s_curr: {succ_s.position}")
                 new_g = curr_s.g + 1
-                if succ_s.position in [s.position for s in CLOSED_LIST] and new_g >= succ_s.g:
-                    continue
-                if any(succ_s.position == s[1].position for s in OPEN_LIST) and new_g >= [s[1].g for s in OPEN_LIST if succ_s.position == s[1].position][0]:
-                    continue
-                succ_s.g = new_g
-                succ_s.h = calc_h(succ_s.position, goal_s.position)
-                succ_s.f = succ_s.g + succ_s.h
-                if succ_s.position not in OPEN_LIST:
-                    heappush(OPEN_LIST, (succ_s.f, succ_s))
+                for closed_s in CLOSED_LIST:
+                    if closed_s == succ_s:
+                        break
                 else:
-                    # update priority of existing state in open list dictionary
-                    for i, (f, s) in enumerate(OPEN_LIST):
-                        if s.position == succ_s.position:
-                            OPEN_LIST[i] = (succ_s.f, succ_s)
-                            heapify(OPEN_LIST)
+                    succ_s.g = new_g
+                    succ_s.h = calc_h(succ_s.position, goal_s.position)
+                    succ_s.f = succ_s.g + succ_s.h
+                    for open_s in OPEN_LIST:
+                        if open_s[1] == succ_s:
+                            if open_s[0] > succ_s.f:
+                                OPEN_LIST.remove(open_s)
+                                heappush(OPEN_LIST, (succ_s.f, succ_s))
                             break
-
+                    else:
+                        heappush(OPEN_LIST, (succ_s.f, succ_s))
     print("No valid path found.")
     return None, None
 
 
+def create_path(curr_s):
+    path = []
+    s = curr_s
+    while s is not None:
+        path.append(s.position)
+        s = s.parent
+    path.reverse()
+    return path, curr_s.g
+
 # function for generating successor state s based on action a
-# function for generating successor state s based on action a
+
+
 def succ(curr_s, a):
     x = curr_s.position[0]
     y = curr_s.position[1]
     if a == "up" and x > 0 and GRID[x-1][y] == 0:
-        succ_s = state(curr_s, (x-1, y), float('inf'), float('inf'))
+        succ_s = state(curr_s, (x-1, y))
         return succ_s
 
     elif a == "down" and x < n-1 and GRID[x+1][y] == 0:
-        succ_s = state(curr_s, (x+1, y), float('inf'), float('inf'))
+        succ_s = state(curr_s, (x+1, y))
         return succ_s
 
     elif a == "left" and y > 0 and GRID[x][y-1] == 0:
-        succ_s = state(curr_s, (x, y-1), float('inf'), float('inf'))
+        succ_s = state(curr_s, (x, y-1))
         return succ_s
 
     elif a == "right" and y < n-1 and GRID[x][y+1] == 0:
-        succ_s = state(curr_s, (x, y+1), float('inf'), float('inf'))
+        succ_s = state(curr_s, (x, y+1))
         return succ_s
 
     return None
@@ -114,8 +121,9 @@ def calc_h(a, b):
 
 
 def main():
-    start_s = state(None, (0, 0), 0, 0)
-    goal_s = state(None, (4, 3), float('inf'), float('inf'))
+    start_s = state(None, (0, 0))
+    start_s.h = start_s.g = 0
+    goal_s = state(None, (8, 8))
     # initialize OPEN and CLOSED list
     OPEN_LIST.clear()
     CLOSED_LIST.clear()

@@ -17,9 +17,15 @@ OPEN_LIST = []
 CLOSED_LIST = set()
 # array of potential actions taken by state s on grid
 actions = ["up", "down", "left", "right"]
+<<<<<<< Updated upstream
 n = 11
 GRID = main.generate_maze(n)
 Fake_Closed_List = []
+=======
+n = 101
+GRID = main.generate_maze(n)
+clv_list = []
+>>>>>>> Stashed changes
 counter = 0
 
 
@@ -34,6 +40,7 @@ class state():
     def __lt__(self, other):
         return self.f < other.f
 
+<<<<<<< Updated upstream
     def equals(self, other):
         return self.position == other.position
 
@@ -41,6 +48,20 @@ class state():
 class animated_path():
 
     def __init__(self, maze, clv_list, pv_list):
+=======
+class animated_path():
+
+    def __init__(self, maze, clv_list, pv_list, start_s, goal_s):
+
+        #Goal & Start States
+        self.goal_s = goal_s
+        self.start_s = start_s
+
+        #Layer 0: Start State Visualization
+        self.ssv = np.zeros(maze.shape, dtype = int)
+        self.ssv = np.ma.masked_where(self.ssv == 0, self.ssv)
+        self.ssv[self.start_s.position[0]][self.start_s.position[1]] = 1
+>>>>>>> Stashed changes
 
         #Layer 1: Maze (AKA GRID) Visualization
         self.maze = maze
@@ -56,16 +77,28 @@ class animated_path():
         #Layer 4: Goal State Visualization
         self.gsv = np.zeros(maze.shape, dtype = int)
         self.gsv = np.ma.masked_where(self.gsv == 0, self.gsv)
+<<<<<<< Updated upstream
+=======
+        self.gsv[self.goal_s.position[0]][self.goal_s.position[1]] = 1
+>>>>>>> Stashed changes
 
         #Closed List
         self.clv_list = clv_list
 
         #Path List
+<<<<<<< Updated upstream
         self.pv_list = pv_list
+=======
+        if pv_list:
+            self.pv_list = pv_list
+        else:
+            self.pv_list = []
+>>>>>>> Stashed changes
 
         #Figure & Axis Init
         self.fig, self.ax = plt.subplots()
 
+<<<<<<< Updated upstream
     def update_pv(self, i):
 
         i -= len(self.clv_list)
@@ -104,6 +137,34 @@ class animated_path():
 
     def start_animation(self):
         anim = animation.FuncAnimation(self.fig, self.animate, frames = len(self.clv_list), interval = 50)
+=======
+    def animate(self, i):
+
+        self.ax.clear()
+
+        if i < len(self.clv_list):
+
+            self.clv[self.clv_list[i].position[0]][self.clv_list[i].position[1]] = 1 #Update clv with searched states
+
+        elif i - len(self.clv_list) < len(self.pv_list):
+
+            i -= len(self.clv_list) 
+            self.pv[self.pv_list[i].position[0]][self.pv_list[i].position[1]] = 1 #Update pv with path states
+
+        else:
+            print('.', end = '')
+            return
+
+        #Show All Layers
+        plt.imshow(self.maze, alpha = 1, cmap = 'Greys')
+        plt.imshow(self.clv, alpha = .5, cmap = 'tab20c')
+        plt.imshow(self.pv, alpha = .5, cmap = 'summer')
+        plt.imshow(self.ssv, alpha = 1, cmap = 'cool')
+        plt.imshow(self.gsv, alpha = .75, cmap = 'Dark2')
+
+    def start_animation(self):
+        anim = animation.FuncAnimation(self.fig, self.animate, frames = len(self.clv_list) + len(self.pv_list), interval = 1)
+>>>>>>> Stashed changes
         plt.show()
 
 def a_star(start_s, goal_s):
@@ -116,6 +177,7 @@ def a_star(start_s, goal_s):
         # identify s with smallest f-value
         curr_f, curr_s = heappop(OPEN_LIST)
         print("iteration: " + str(counter))
+<<<<<<< Updated upstream
         print(f"s_curr: {curr_s.position}")
         Fake_Closed_List.append(curr_s)
         if curr_s.equals(goal_s):
@@ -128,6 +190,14 @@ def a_star(start_s, goal_s):
             return path, curr_s.g
         # add to close list
         CLOSED_LIST.add(curr_s)
+=======
+        print(f"s_curr: {curr_s}")
+        clv_list.append(curr_s)
+        # found path from start to destination
+        if curr_s == goal_s:
+            print("curr is it!")
+            return create_path(curr_s)
+>>>>>>> Stashed changes
         # for each neighbor of current node
         for a in actions:
             succ_s = succ(curr_s, a)
@@ -158,6 +228,18 @@ def a_star(start_s, goal_s):
     return None, None
 
 
+<<<<<<< Updated upstream
+=======
+def create_path(curr_s):
+    path = []
+    s = curr_s
+    while s is not None:
+        path.append(s)
+        s = s.parent
+    path.reverse()
+    return path, curr_s.g
+
+>>>>>>> Stashed changes
 # function for generating successor state s based on action a
 # function for generating successor state s based on action a
 def succ(curr_s, a):
@@ -187,14 +269,21 @@ def calc_h(a, b):
 
 
 def main():
+<<<<<<< Updated upstream
     start_s = state(None, (0, 0), 0, 0)
     goal_s = state(None, (2,3), float('inf'), float('inf'))
+=======
+    start_s = state(None, (0, 0))
+    start_s.h = start_s.g = 0
+    goal_s = state(None, (100,100))
+>>>>>>> Stashed changes
     # initialize OPEN and CLOSED list
     OPEN_LIST.clear()
     CLOSED_LIST.clear()
     path, min_cost = a_star(start_s, goal_s)
     if path:
         print([s.position for s in path])
+<<<<<<< Updated upstream
     else:
         print(path)
     print("min cost: " + str(min_cost))
@@ -206,6 +295,13 @@ def main():
     # Visualize Path
     # path_vis = animated_path(GRID, path)
     # path_vis.start_animation()
+=======
+    print("min cost: " + str(min_cost))
+
+    ###Animation Call###
+    visualization = animated_path(GRID, clv_list, path, start_s, goal_s)
+    visualization.start_animation()
+>>>>>>> Stashed changes
 
 
 if __name__ == "__main__":

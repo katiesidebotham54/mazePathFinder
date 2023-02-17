@@ -16,9 +16,9 @@ class animated_path():
         self.start_s = start_s
 
         #Layer 0: Start State Visualization
-        self.ssv = np.zeros(maze.shape, dtype = bool)
-        self.ssv = np.ma.masked_where(self.ssv == 0, self.ssv)
-        self.ssv[self.start_s.position[0]][self.start_s.position[1]] = 1
+        self.ssv = np.ones(maze.shape, dtype = bool)
+        self.ssv = np.ma.masked_where(self.ssv == 1, self.ssv)
+        self.ssv[self.start_s.position[0]][self.start_s.position[1]] = 0
 
         #Layer 1: Maze (AKA GRID) Visualization
         self.maze = maze
@@ -28,7 +28,7 @@ class animated_path():
         self.clv = np.ma.masked_where(self.clv == 0, self.clv)
 
         #Layer 3: Path Visualization
-        self.pv = np.zeros(maze.shape, dtype = bool)
+        self.pv = np.zeros(maze.shape, dtype = float)
         self.pv = np.ma.masked_where(self.pv == 0, self.pv)
 
         #Layer 4: Goal State Visualization
@@ -45,8 +45,8 @@ class animated_path():
         else:
             self.path = []
 
-        #Max of Closed List (for gradient purposes)
-        self.max_g = max([state.g for state in self.closed_list])
+        #Max g of Lists (for gradient purposes)
+        self.c_max_g = max([state.g for state in self.closed_list])
 
         #Figure & Axis Init
         self.fig, self.ax = plt.subplots()
@@ -57,19 +57,21 @@ class animated_path():
 
         if i < len(self.closed_list):
 
-            if self.max_g != 0:
+            if self.c_max_g != 0:
 
-                self.clv[self.closed_list[i].position[0]][self.closed_list[i].position[1]] =  self.closed_list[i].g / self.max_g
+                self.clv[self.closed_list[i].position[0]][self.closed_list[i].position[1]] = self.closed_list[i].g / self.c_max_g
             
             else:
 
                 self.clv[self.closed_list[i].position[0]][self.closed_list[i].position[1]] = 1
 
-
         elif i - len(self.closed_list) < len(self.path):
 
-            i -= len(self.closed_list) 
-            self.pv[self.path[i].position[0]][self.path[i].position[1]] = 1 #Update pv with path states
+            i -= len(self.closed_list)
+
+            self.pv[self.path[i].position[0]][self.path[i].position[1]] = 1 - i / len(self.path)
+
+ #Update pv with path states
 
         else:
             print('.', end = '')
@@ -78,9 +80,9 @@ class animated_path():
         #Show All Layers
         plt.imshow(self.maze, alpha = 1, cmap = 'Greys')
         plt.imshow(self.clv, alpha = .5, cmap = 'Wistia')
-        plt.imshow(self.pv, alpha = .5, cmap = 'summer')
-        plt.imshow(self.ssv, alpha = .5, cmap = 'cool')
-        plt.imshow(self.gsv, alpha = .5, cmap = 'autumn')
+        plt.imshow(self.pv, alpha = 1, cmap = 'cool')
+        plt.imshow(self.ssv, alpha = 1, cmap = 'spring')
+        plt.imshow(self.gsv, alpha = 1, cmap = 'cool')
 
     def start_animation(self):
         anim = animation.FuncAnimation(self.fig, self.animate, frames = len(self.closed_list) + len(self.path), interval = self.interval)

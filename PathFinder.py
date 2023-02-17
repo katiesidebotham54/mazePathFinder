@@ -14,7 +14,7 @@ OPEN_LIST = []
 CLOSED_LIST = set()
 # array of potential actions taken by state s on grid
 actions = ["up", "down", "left", "right"]
-n = 10
+n = 101
 GRID = main.maze
 counter = 0
 
@@ -47,8 +47,6 @@ def a_star(start_s, goal_s):
         # identify s with smallest f-value
         curr_f, curr_s = heappop(OPEN_LIST)
         CLOSED_LIST.add(curr_s)
-        print("iteration: " + str(counter))
-        print(f"s_curr: {curr_s}")
         # found path from start to destination
         if curr_s == goal_s:
             print("curr is it!")
@@ -56,12 +54,9 @@ def a_star(start_s, goal_s):
         # for each neighbor of current node
         for a in actions:
             succ_s = succ(curr_s, a)
-            print(f"succ_s: {succ_s}")
             if succ_s is None:
                 continue
             else:
-                print(f"succ_s: {succ_s}")
-                print(f"s_curr: {succ_s.position}")
                 new_g = curr_s.g + 1
                 for closed_s in CLOSED_LIST:
                     if closed_s == succ_s:
@@ -123,7 +118,7 @@ def calc_h(a, b):
 def main():
     start_s = state(None, (0, 0))
     start_s.h = start_s.g = 0
-    goal_s = state(None, (8, 8))
+    goal_s = state(None, (100, 100))
     # initialize OPEN and CLOSED list
     OPEN_LIST.clear()
     CLOSED_LIST.clear()

@@ -27,7 +27,10 @@ class animated_path():
 
         #Animation Init
         self.fig, self.ax = plt.subplots()
+        plt.tick_params(left = False, right = False , labelleft = False ,
+                labelbottom = False, bottom = False)        
         self.interval = 100 / maze.shape[0]
+
 
     def animate(self, i):
 
@@ -53,6 +56,7 @@ class animated_path():
 
         #Show
         self.ax.clear()
+        self.ax.axis('off')
         plt.imshow(self.maze, alpha = 1, cmap = 'Greys')
         plt.imshow(self.clv, alpha = .5, cmap = 'Wistia')
         plt.imshow(self.pv, alpha = 1, cmap = 'cool')

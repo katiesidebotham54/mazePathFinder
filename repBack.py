@@ -1,40 +1,24 @@
 from heapq import heappush, heappop
-import main
+from main import n
+from main import maze
+from main import state
+from main import actions
 import numpy as np
 import matplotlib.pyplot as plt
 import time
 
-
 start_s = None
 goal_s = None
-# priority queue which contains only the start state initially, keeps track of all nodes to be visited --> binary heap using python libraries
+# priority queue which contains only the start state initially, 
+# keeps track of all nodes to be visited --> binary heap using python libraries
 # holds tuple (f-value, s)
 OPEN_LIST = []
-# set that keeps track of all nodes that have already been visited --> put state s into list when expanding that node
+# set that keeps track of all nodes that have already been visited --> 
+# put state s into list when expanding that node
 CLOSED_LIST = set()
 # array of potential actions taken by state s on grid
 actions = ["up", "down", "left", "right"]
-n = 5
-GRID = main.maze
-
-
-class state():
-    def __init__(self, parent=None, position=None):
-        self.parent = parent
-        self.position = position
-        self.g = float('inf')
-        self.h = float('inf')
-        self.f = self.g + self.h
-
-    def __eq__(self, other):
-        return self.position == other.position
-
-    def __hash__(self):
-        return hash(self.position)
-
-    def __lt__(self, other):
-        return self.f < other.f
-
+GRID = maze
 
 def a_star(goal_s, start_s):
 

@@ -1,5 +1,8 @@
 from heapq import heappush, heappop
-import main
+from main import n
+from main import maze
+from main import state
+from main import actions
 import numpy as np
 import visualization
 import time as time
@@ -15,29 +18,7 @@ CLOSED_LIST = set()
 # List (not set) that mirrors closed_list in order to visualize when nodes are explored (added to CLOSED_LIST)
 clv_list = []
 # array of potential actions taken by state s on grid
-actions = ["up", "down", "left", "right"]
-n = 51
-GRID = main.generate_maze(n)
-counter = 0
-
-
-class state():
-    def __init__(self, parent=None, position=None):
-        self.parent = parent
-        self.position = position
-        self.g = float('inf')
-        self.h = float('inf')
-        self.f = self.g + self.h
-
-    def __eq__(self, other):
-        return self.position == other.position
-
-    def __hash__(self):
-        return hash(self.position)
-
-    def __lt__(self, other):
-        return self.f < other.f
-
+GRID = maze
 
 def a_star(start_s, goal_s):
 
@@ -47,7 +28,7 @@ def a_star(start_s, goal_s):
         # identify s with smallest f-value
         curr_f, curr_s = heappop(OPEN_LIST)
         CLOSED_LIST.add(curr_s)
-        clv_list.append(curr_s)
+        # clv_list.append(curr_s)
         # found path from start to destination
         if curr_s == goal_s:
             return create_path(curr_s)

@@ -1,5 +1,8 @@
 from heapq import heappush, heappop
-import main
+from main import n
+from main import maze
+from main import state
+from main import actions
 import numpy as np
 import matplotlib.pyplot as plt
 import time
@@ -14,23 +17,10 @@ OPEN_LIST = []
 CLOSED_LIST = set()
 # array of potential actions taken by state s on grid
 actions = ["up", "down", "left", "right"]
-n = 5
-GRID = main.maze
+GRID = maze
 
 
-class state():
-    def __init__(self, parent=None, position=None):
-        self.parent = parent
-        self.position = position
-        self.g = float('inf')
-        self.h = float('inf')
-        self.f = self.g + self.h
-
-    def __eq__(self, other):
-        return self.position == other.position
-
-    def __hash__(self):
-        return hash(self.position)
+class forstate(state):
 
     def __lt__(self, other):
         return self.f < other.f or self.g > other.g
@@ -90,19 +80,19 @@ def succ(curr_s, a):
     x = curr_s.position[0]
     y = curr_s.position[1]
     if a == "up" and x > 0 and GRID[x-1][y] == 0:
-        succ_s = state(curr_s, (x-1, y))
+        succ_s = forstate(curr_s, (x-1, y))
         return succ_s
 
     elif a == "down" and x < n-1 and GRID[x+1][y] == 0:
-        succ_s = state(curr_s, (x+1, y))
+        succ_s = forstate(curr_s, (x+1, y))
         return succ_s
 
     elif a == "left" and y > 0 and GRID[x][y-1] == 0:
-        succ_s = state(curr_s, (x, y-1))
+        succ_s = forstate(curr_s, (x, y-1))
         return succ_s
 
     elif a == "right" and y < n-1 and GRID[x][y+1] == 0:
-        succ_s = state(curr_s, (x, y+1))
+        succ_s = forstate(curr_s, (x, y+1))
         return succ_s
 
     return None
@@ -114,9 +104,9 @@ def calc_h(a, b):
 
 def main():
     start = time.time()
-    start_s = state(None, (0, 0))
+    start_s = forstate(None, (0, 0))
     start_s.h = start_s.g = 0
-    goal_s = state(None, (4, 4))
+    goal_s = forstate(None, (4, 4))
     # initialize OPEN and CLOSED list
     OPEN_LIST.clear()
     CLOSED_LIST.clear()

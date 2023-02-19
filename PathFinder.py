@@ -1,8 +1,8 @@
 from heapq import heappush, heappop
 import main
 import numpy as np
-import matplotlib.pyplot as plt
-import time
+import visualization
+import time as time
 
 
 start_s = None
@@ -12,10 +12,13 @@ goal_s = None
 OPEN_LIST = []
 # set that keeps track of all nodes that have already been visited --> put state s into list when expanding that node
 CLOSED_LIST = set()
+# List (not set) that mirrors closed_list in order to visualize when nodes are explored (added to CLOSED_LIST)
+clv_list = []
 # array of potential actions taken by state s on grid
 actions = ["up", "down", "left", "right"]
-n = 5
-GRID = main.maze
+n = 51
+GRID = main.generate_maze(n)
+counter = 0
 
 
 class state():
@@ -44,6 +47,7 @@ def a_star(start_s, goal_s):
         # identify s with smallest f-value
         curr_f, curr_s = heappop(OPEN_LIST)
         CLOSED_LIST.add(curr_s)
+        clv_list.append(curr_s)
         # found path from start to destination
         if curr_s == goal_s:
             return create_path(curr_s)
@@ -77,7 +81,7 @@ def create_path(curr_s):
     path = []
     s = curr_s
     while s is not None:
-        path.append(s.position)
+        path.append(s)
         s = s.parent
     path.reverse()
     return path, curr_s.g
@@ -115,13 +119,18 @@ def main():
     start = time.time()
     start_s = state(None, (0, 0))
     start_s.h = start_s.g = 0
-    goal_s = state(None, (4, 4))
+    goal_s = state(None, (50, 50))
     # initialize OPEN and CLOSED list
     OPEN_LIST.clear()
     CLOSED_LIST.clear()
     path, min_cost = a_star(start_s, goal_s)
-    print(path)
+    if path:
+        print([s.position for s in path])
     print("min cost: " + str(min_cost))
+
+    ###Animation Call###
+    vis = visualization.animated_path(GRID, clv_list, path, start_s, goal_s)
+    vis.start_animation()
     end = time.time()
     total_time = end - start
     print("\n" + str(total_time))

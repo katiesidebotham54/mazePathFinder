@@ -33,19 +33,20 @@ class state():
         return hash(self.position)
 
     def __lt__(self, other):
-        return self.f < other.f
+        return self.f < other.f or self.g > other.g
 
 
-def a_star(goal_s, start_s):
+def a_star(start_s, goal_s):
 
-    heappush(OPEN_LIST, (goal_s.f, goal_s))
+    heappush(OPEN_LIST, (start_s.f, start_s))
 
     while OPEN_LIST:
         # identify s with smallest f-value
         curr_f, curr_s = heappop(OPEN_LIST)
+
         CLOSED_LIST.add(curr_s)
         # found path from start to destination
-        if curr_s == start_s:
+        if curr_s == goal_s:
             return create_path(curr_s)
         # for each neighbor of current node
         for a in actions:
@@ -59,7 +60,7 @@ def a_star(goal_s, start_s):
                         break
                 else:
                     succ_s.g = new_g
-                    succ_s.h = calc_h(succ_s.position, start_s.position)
+                    succ_s.h = calc_h(succ_s.position, goal_s.position)
                     succ_s.f = succ_s.g + succ_s.h
                     for open_s in OPEN_LIST:
                         if open_s[1] == succ_s:
@@ -108,19 +109,18 @@ def succ(curr_s, a):
 
 
 def calc_h(a, b):
-    return abs(b[0] - a[0]) + abs(b[1] - a[1])
+    return abs(a[0] - b[0]) + abs(a[1] - b[1])
 
 
 def main():
     start = time.time()
     start_s = state(None, (0, 0))
+    start_s.h = start_s.g = 0
     goal_s = state(None, (4, 4))
-    goal_s.h = goal_s.g = 0
-
     # initialize OPEN and CLOSED list
     OPEN_LIST.clear()
     CLOSED_LIST.clear()
-    path, min_cost = a_star(goal_s, start_s)
+    path, min_cost = a_star(start_s, goal_s)
     print(path)
     print("min cost: " + str(min_cost))
     end = time.time()

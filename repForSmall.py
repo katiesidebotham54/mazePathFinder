@@ -1,23 +1,6 @@
 from heapq import heappush, heappop
-from main import n
-from main import maze
-from main import state
-from main import actions
+from main import n, GRID, state, actions, OPEN_LIST, CLOSED_LIST, clv_list
 import numpy as np
-import matplotlib.pyplot as plt
-import time
-
-
-start_s = None
-goal_s = None
-# priority queue which contains only the start state initially, keeps track of all nodes to be visited --> binary heap using python libraries
-# holds tuple (f-value, s)
-OPEN_LIST = []
-# set that keeps track of all nodes that have already been visited --> put state s into list when expanding that node
-CLOSED_LIST = set()
-# array of potential actions taken by state s on grid
-actions = ["up", "down", "left", "right"]
-GRID = maze
 
 
 def a_star(start_s, goal_s):
@@ -28,6 +11,7 @@ def a_star(start_s, goal_s):
         # identify s with smallest f-value
         curr_f, curr_s = heappop(OPEN_LIST)
         CLOSED_LIST.add(curr_s)
+        clv_list.append(curr_s)
         # found path from start to destination
         if curr_s == goal_s:
             return create_path(curr_s)
@@ -62,7 +46,7 @@ def create_path(curr_s):
     path = []
     s = curr_s
     while s is not None:
-        path.append(s.position)
+        path.append(s)
         s = s.parent
     path.reverse()
     return path, curr_s.g
@@ -94,23 +78,3 @@ def succ(curr_s, a):
 
 def calc_h(a, b):
     return abs(a[0] - b[0]) + abs(a[1] - b[1])
-
-
-def main():
-    start = time.time()
-    start_s = state(None, (0, 0))
-    start_s.h = start_s.g = 0
-    goal_s = state(None, (4, 4))
-    # initialize OPEN and CLOSED list
-    OPEN_LIST.clear()
-    CLOSED_LIST.clear()
-    path, min_cost = a_star(start_s, goal_s)
-    print(path)
-    print("min cost: " + str(min_cost))
-    end = time.time()
-    total_time = end - start
-    print("\n" + str(total_time))
-
-
-if __name__ == "__main__":
-    main()

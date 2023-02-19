@@ -16,6 +16,7 @@ class animated_path():
         self.closed_list = closed_list
         if self.closed_list:
             self.c_max_g = max([state.g for state in self.closed_list])
+            
         self.clv = np.zeros(maze.shape, dtype=float)
         self.clv = np.ma.masked_where(self.clv == 0, self.clv)
 

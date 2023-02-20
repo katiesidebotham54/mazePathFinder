@@ -1,40 +1,6 @@
 from heapq import heappush, heappop
-import main
+from main import n, GRID, state, actions, OPEN_LIST, CLOSED_LIST, clv_list
 import numpy as np
-import matplotlib.pyplot as plt
-import time
-
-
-start_s = None
-goal_s = None
-# priority queue which contains only the start state initially, keeps track of all nodes to be visited --> binary heap using python libraries
-# holds tuple (f-value, s)
-OPEN_LIST = []
-# set that keeps track of all nodes that have already been visited --> put state s into list when expanding that node
-CLOSED_LIST = set()
-# array of potential actions taken by state s on grid
-actions = ["up", "down", "left", "right"]
-n = 5
-GRID = main.maze
-
-
-class state():
-    def __init__(self, parent=None, position=None):
-        self.parent = parent
-        self.position = position
-        self.g = float('inf')
-        self.h = float('inf')
-        self.f = self.g + self.h
-
-    def __eq__(self, other):
-        return self.position == other.position
-
-    def __hash__(self):
-        return hash(self.position)
-
-    def __lt__(self, other):
-        return self.f < other.f
-
 
 def a_star(goal_s, start_s):
 
@@ -44,6 +10,7 @@ def a_star(goal_s, start_s):
         # identify s with smallest f-value
         curr_f, curr_s = heappop(OPEN_LIST)
         CLOSED_LIST.add(curr_s)
+        clv_list.append(curr_s)
         # found path from start to destination
         if curr_s == start_s:
             return create_path(curr_s)
@@ -77,7 +44,7 @@ def create_path(curr_s):
     path = []
     s = curr_s
     while s is not None:
-        path.append(s.position)
+        path.append(s)
         s = s.parent
     path.reverse()
     return path, curr_s.g
@@ -109,24 +76,3 @@ def succ(curr_s, a):
 
 def calc_h(a, b):
     return abs(b[0] - a[0]) + abs(b[1] - a[1])
-
-
-def main():
-    start = time.time()
-    start_s = state(None, (0, 0))
-    goal_s = state(None, (4, 4))
-    goal_s.h = goal_s.g = 0
-
-    # initialize OPEN and CLOSED list
-    OPEN_LIST.clear()
-    CLOSED_LIST.clear()
-    path, min_cost = a_star(goal_s, start_s)
-    print(path)
-    print("min cost: " + str(min_cost))
-    end = time.time()
-    total_time = end - start
-    print("\n" + str(total_time))
-
-
-if __name__ == "__main__":
-    main()

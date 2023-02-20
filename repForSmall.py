@@ -2,8 +2,9 @@ from heapq import heappush, heappop
 from main import n, GRID, state, actions, OPEN_LIST, CLOSED_LIST, clv_list
 import numpy as np
 
-def a_star(start_s, goal_s):
 
+def a_star(start_s, goal_s):
+    start_s.g = 0
     heappush(OPEN_LIST, (start_s.f, start_s))
 
     while OPEN_LIST:
@@ -25,17 +26,18 @@ def a_star(start_s, goal_s):
                     if closed_s == succ_s:
                         break
                 else:
-                    succ_s.g = new_g
-                    succ_s.h = calc_h(succ_s.position, goal_s.position)
-                    succ_s.f = succ_s.g + succ_s.h
-                    for open_s in OPEN_LIST:
-                        if open_s[1] == succ_s:
-                            if open_s[0] > succ_s.f:
-                                OPEN_LIST.remove(open_s)
-                                heappush(OPEN_LIST, (succ_s.f, succ_s))
-                            break
-                    else:
-                        heappush(OPEN_LIST, (succ_s.f, succ_s))
+                    if new_g < succ_s.g:
+                        succ_s.g = new_g
+                        succ_s.h = calc_h(succ_s.position, goal_s.position)
+                        succ_s.f = succ_s.g + succ_s.h
+                        for open_s in OPEN_LIST:
+                            if open_s[1] == succ_s:
+                                if open_s[0] > succ_s.f:
+                                    OPEN_LIST.remove(open_s)
+                                    heappush(OPEN_LIST, (succ_s.f, succ_s))
+                                break
+                        else:
+                            heappush(OPEN_LIST, (succ_s.f, succ_s))
     print("No valid path found.")
     return None, None
 

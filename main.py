@@ -22,7 +22,7 @@ class state():
         return self.f < other.f
 
 #Grid Dimensions
-n = 101
+n = 11
 #Grid
 GRID = generate_maze(n)
 # priority queue which contains only the start state initially, keeps track of all nodes to be visited --> binary heap using python libraries

@@ -6,11 +6,13 @@ import numpy as np
 class forstate(state):
 
     def __lt__(self, other):
-        return self.f < other.f or self.g < other.g
+        if self.f == other.f:
+            return self.g > other.g
+        return self.f < other.f
 
 
 def a_star(start_s, goal_s):
-    c = 2*n*n; 
+    c = (-n)*n; 
     heappush(OPEN_LIST, (c*start_s.f-start_s.g, start_s))
     
     while OPEN_LIST:

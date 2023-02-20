@@ -16,7 +16,7 @@ CLOSED_LIST = set()
 clv_list = []
 # array of potential actions taken by state s on grid
 actions = ["up", "down", "left", "right"]
-n = 51
+n = 5
 GRID = main.generate_maze(n)
 counter = 0
 
@@ -119,7 +119,7 @@ def main():
     start = time.time()
     start_s = state(None, (0, 0))
     start_s.h = start_s.g = 0
-    goal_s = state(None, (50, 50))
+    goal_s = state(None, (4, 4))
     # initialize OPEN and CLOSED list
     OPEN_LIST.clear()
     CLOSED_LIST.clear()

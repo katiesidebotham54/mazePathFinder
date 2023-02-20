@@ -63,31 +63,31 @@ def generate_maze(n):
             stack.append((next_i, next_j))
         else:
             stack.pop()
-    # maze[0][0] = 0
-    # maze[0][1] = 0
-    # maze[0][2] = 1
-    # maze[0][3] = 1
-    # maze[0][4] = 0
-    # maze[1][0] = 0
-    # maze[1][1] = 0
-    # maze[1][2] = 0
-    # maze[1][3] = 1
-    # maze[1][4] = 0
-    # maze[2][0] = 0
-    # maze[2][1] = 1
-    # maze[2][2] = 0
-    # maze[2][3] = 0
-    # maze[2][4] = 1
-    # maze[3][0] = 0
-    # maze[3][1] = 0
-    # maze[3][2] = 0
-    # maze[3][3] = 0
-    # maze[3][4] = 0
-    # maze[4][0] = 0
-    # maze[4][1] = 1
-    # maze[4][2] = 1
-    # maze[4][3] = 0
-    # maze[n-1][n-1] = 0
+    maze[0][0] = 0
+    maze[0][1] = 0
+    maze[0][2] = 1
+    maze[0][3] = 1
+    maze[0][4] = 0
+    maze[1][0] = 0
+    maze[1][1] = 0
+    maze[1][2] = 0
+    maze[1][3] = 1
+    maze[1][4] = 0
+    maze[2][0] = 0
+    maze[2][1] = 1
+    maze[2][2] = 0
+    maze[2][3] = 0
+    maze[2][4] = 1
+    maze[3][0] = 0
+    maze[3][1] = 0
+    maze[3][2] = 0
+    maze[3][3] = 0
+    maze[3][4] = 0
+    maze[4][0] = 0
+    maze[4][1] = 1
+    maze[4][2] = 1
+    maze[4][3] = 0
+    maze[n-1][n-1] = 0
 
     return maze
 
@@ -100,5 +100,5 @@ def generate_maze(n):
 # mazes = np.array(mazes)
 
 # Visualize the first maze
-# plt.imshow(maze, cmap='binary')
-# plt.show()
+#plt.imshow(maze, cmap='binary')
+#plt.show()

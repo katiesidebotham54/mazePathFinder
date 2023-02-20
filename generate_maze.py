@@ -2,6 +2,7 @@ import random
 import numpy as np
 import matplotlib.pyplot as plt
 
+
 def generate_maze(n):
     maze = np.zeros((n, n), dtype=int)
     visited = [[False for j in range(n)] for i in range(n)]
@@ -62,5 +63,4 @@ def generate_maze(n):
             stack.append((next_i, next_j))
         else:
             stack.pop()
-
     return maze

@@ -2,6 +2,7 @@ from heapq import heappush, heappop
 from main import n, GRID, state, actions, OPEN_LIST, CLOSED_LIST, clv_list
 import numpy as np
 
+
 def a_star(start_s, goal_s):
 
     heappush(OPEN_LIST, (start_s.f, start_s))
@@ -36,7 +37,7 @@ def a_star(start_s, goal_s):
                             break
                     else:
                         heappush(OPEN_LIST, (succ_s.f, succ_s))
-    print("No valid path found.")
+    # print("No valid path found.")
     return None, None
 
 

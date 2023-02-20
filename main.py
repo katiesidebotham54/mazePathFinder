@@ -1,6 +1,6 @@
-import numpy as np
-import matplotlib.pyplot as plt
 from generate_maze import generate_maze
+import numpy as np
+
 
 class state():
     def __init__(self, parent=None, position=None):
@@ -19,10 +19,16 @@ class state():
     def __lt__(self, other):
         return self.f < other.f
 
-#Grid Dimensions
-n = 11
-#Grid
-GRID = generate_maze(n)
+
+# Grid Dimensions
+n = 101
+# Grid
+mazes = [generate_maze(n) for i in range(50)]
+# Store the mazes in a numpy array
+mazes = np.array(mazes)
+# for visualization purposes
+GRID = mazes[0]
+
 # priority queue which contains only the start state initially, keeps track of all nodes to be visited --> binary heap using python libraries
 # holds tuple (f-value, s)
 OPEN_LIST = []
@@ -30,4 +36,5 @@ OPEN_LIST = []
 CLOSED_LIST = set()
 # array of potential actions taken by state s on grid
 clv_list = []
+
 actions = ["up", "down", "left", "right"]

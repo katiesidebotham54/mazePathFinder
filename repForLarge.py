@@ -1,6 +1,5 @@
 from heapq import heappush, heappop
 from main import n, GRID, state, actions, OPEN_LIST, CLOSED_LIST, clv_list
-import numpy as np
 
 
 class forstate(state):
@@ -12,13 +11,12 @@ class forstate(state):
 
 
 def a_star(start_s, goal_s):
-    c = (-n)*n; 
+    c = (-n)*n
     heappush(OPEN_LIST, (c*start_s.f-start_s.g, start_s))
-    
+
     while OPEN_LIST:
         # identify s with smallest f-value
         curr_f, curr_s = heappop(OPEN_LIST)
-
         CLOSED_LIST.add(curr_s)
         clv_list.append(curr_s)
         # found path from start to destination
@@ -42,11 +40,11 @@ def a_star(start_s, goal_s):
                         if open_s[1] == succ_s:
                             if open_s[0] > c*succ_s.f-succ_s.g:
                                 OPEN_LIST.remove(open_s)
-                                heappush(OPEN_LIST, (c*succ_s.f-succ_s.g, succ_s))
+                                heappush(
+                                    OPEN_LIST, (c*succ_s.f-succ_s.g, succ_s))
                             break
                     else:
                         heappush(OPEN_LIST, (c*succ_s.f-succ_s.g, succ_s))
-    print("No valid path found.")
     return None, None
 
 

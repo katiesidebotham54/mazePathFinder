@@ -1,7 +1,5 @@
-import random
 import numpy as np
 import matplotlib.pyplot as plt
-import time
 from generate_maze import generate_maze
 
 class state():

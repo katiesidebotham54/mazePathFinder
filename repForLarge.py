@@ -6,13 +6,13 @@ import numpy as np
 class forstate(state):
 
     def __lt__(self, other):
-        return self.f < other.f or self.g > other.g
+        return self.f < other.f or self.g < other.g
 
 
 def a_star(start_s, goal_s):
-
-    heappush(OPEN_LIST, (start_s.f, start_s))
-
+    c = 2*n*n; 
+    heappush(OPEN_LIST, (c*start_s.f-start_s.g, start_s))
+    
     while OPEN_LIST:
         # identify s with smallest f-value
         curr_f, curr_s = heappop(OPEN_LIST)
@@ -38,12 +38,12 @@ def a_star(start_s, goal_s):
                     succ_s.f = succ_s.g + succ_s.h
                     for open_s in OPEN_LIST:
                         if open_s[1] == succ_s:
-                            if open_s[0] > succ_s.f:
+                            if open_s[0] > c*succ_s.f-succ_s.g:
                                 OPEN_LIST.remove(open_s)
-                                heappush(OPEN_LIST, (succ_s.f, succ_s))
+                                heappush(OPEN_LIST, (c*succ_s.f-succ_s.g, succ_s))
                             break
                     else:
-                        heappush(OPEN_LIST, (succ_s.f, succ_s))
+                        heappush(OPEN_LIST, (c*succ_s.f-succ_s.g, succ_s))
     print("No valid path found.")
     return None, None
 

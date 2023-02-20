@@ -3,21 +3,25 @@ import main
 import random
 import numpy as np
 import matplotlib.pyplot as plt
-#import visualization
-#import time as time
+import visualization
+import time as time
 
 
 start_s = None
 goal_s = None
+START_POS = (0, 0)
+GOAL_POS = (9, 9)
 # priority queue which contains only the start state initially, keeps track of all nodes to be visited --> binary heap using python libraries
 # holds tuple (f-value, s)
 OPEN_LIST = []
 # set that keeps track of all nodes that have already been visited --> put state s into list when expanding that node
 CLOSED_LIST = set()
 # List (not set) that mirrors closed_list in order to visualize when nodes are explored (added to CLOSED_LIST)
+clv_list = []
+# List (not set) that mirrors closed_list in order to visualize when nodes are explored (added to CLOSED_LIST)
 #clv_list = []
 actions = ["up", "down", "left", "right"]
-n = 5
+n = 10
 GRID = main.generate_maze(n)
 counter = 0
 
@@ -41,6 +45,7 @@ class state():
 
 
 def a_star(start_s, goal_s, heuristic):
+    print("Running adaptive a!")
     global counter
     counter = 0
 
@@ -53,44 +58,42 @@ def a_star(start_s, goal_s, heuristic):
         # identify s with smallest f-value
         curr_f, curr_s = heappop(OPEN_LIST)
         CLOSED_LIST.add(curr_s)
-        g_values[curr_s] = curr_s.g  # update the g-value dictionary with the expanded state
+        clv_list.append(curr_s)
+        # update the g-value dictionary with the expanded state
+        g_values[curr_s] = curr_s.g
 
         # found path from start to destination
         if curr_s == goal_s:
-            if curr_s.g<min_cost:
+            if curr_s.g < min_cost:
                 min_cost = curr_s.g
-            print("Goal state found!")
-            return create_path(curr_s),min_cost
-            #return create_path(curr_s), counter
-            continue
-
+            return create_path(curr_s)
         # for each neighbor of current node
         for a in actions:
             succ_s = succ(curr_s, a)
             if succ_s is None:
                 continue
-          
+
             # update the h-value if a lower g-value is found
             if succ_s in g_values and g_values[succ_s] <= curr_s.g:
                 continue
             else:
                 succ_s.g = curr_s.g + 1
-                print("Heuristic before update:", succ_s.h)
-                succ_s.h = heuristic(succ_s.position,goal_s.position)
-                print("Heuristic after update:", succ_s.h)
+                # print("Heuristic before update:", succ_s.h)
+                succ_s.h = heuristic(succ_s.position, goal_s.position)
+                # print("Heuristic after update:", succ_s.h)
                 succ_s.f = succ_s.g + succ_s.h
                 for open_f, open_s in OPEN_LIST:
                     if open_s == succ_s and open_f <= succ_s.f:
                         break
                 else:
                     heappush(OPEN_LIST, (succ_s.f, succ_s))
-
         # adaptively update the h-values of states in the OPEN_LIST
         for i in range(len(OPEN_LIST)):
             open_f, open_s = OPEN_LIST[i]
             if open_s not in g_values:
                 continue
-            new_h = heuristic(open_s.position, goal_s.position) + g_values[open_s] - start_s.g
+            new_h = heuristic(open_s.position, goal_s.position) + \
+                g_values[open_s] - start_s.g
             if new_h < open_s.h:
                 OPEN_LIST[i] = (open_s.g + new_h, open_s)
                 heapify(OPEN_LIST)
@@ -99,12 +102,11 @@ def a_star(start_s, goal_s, heuristic):
         return None, None
 
 
-
 def create_path(curr_s):
     path = []
     s = curr_s
     while s is not None:
-        path.append(s.position)
+        path.append(s)
         s = s.parent
     path.reverse()
     return path, curr_s.g
@@ -135,22 +137,30 @@ def succ(curr_s, a):
 
 
 def calc_h(a, b):
-   return abs(a[0] - b[0]) + abs(a[1] - b[1])
+    return abs(a[0] - b[0]) + abs(a[1] - b[1])
 
 
 def main():
-    start_s = state(None, (0, 0))
-    goal_s = state(None, (4, 4))
+    start = time.time()
+    start_s = state(None, START_POS)
+    goal_s = state(None, GOAL_POS)
     start_s.g = 0
-    start_s.h = calc_h(start_s.position, goal_s.position) 
-    
-    heuristic =lambda pos,goal: calc_h(pos, goal_s.position)
+    start_s.h = calc_h(start_s.position, goal_s.position)
+    def heuristic(pos, goal): return calc_h(pos, goal_s.position)
     # initialize OPEN and CLOSED list
     OPEN_LIST.clear()
     CLOSED_LIST.clear()
     path, min_cost = a_star(start_s, goal_s, heuristic)
-    print(path)
+    if path:
+        print([s.position for s in path])
     print("min cost: " + str(min_cost))
+    end = time.time()
+    total_time = end - start
+    print("\n" + str(total_time))
+
+    ###Animation Call###
+    vis = visualization.animated_path(GRID, clv_list, path, start_s, goal_s)
+    vis.start_animation()
 
 
 if __name__ == "__main__":

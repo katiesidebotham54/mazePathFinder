@@ -7,6 +7,8 @@ import time as time
 
 start_s = None
 goal_s = None
+START_POS = (0, 0)
+GOAL_POS = (9, 9)
 # priority queue which contains only the start state initially, keeps track of all nodes to be visited --> binary heap using python libraries
 # holds tuple (f-value, s)
 OPEN_LIST = []
@@ -16,7 +18,7 @@ CLOSED_LIST = set()
 clv_list = []
 # array of potential actions taken by state s on grid
 actions = ["up", "down", "left", "right"]
-n = 5
+n = 10
 GRID = main.generate_maze(n)
 counter = 0
 
@@ -117,9 +119,9 @@ def calc_h(a, b):
 
 def main():
     start = time.time()
-    start_s = state(None, (0, 0))
+    start_s = state(None, START_POS)
     start_s.h = start_s.g = 0
-    goal_s = state(None, (4, 4))
+    goal_s = state(None, GOAL_POS)
     # initialize OPEN and CLOSED list
     OPEN_LIST.clear()
     CLOSED_LIST.clear()
@@ -127,13 +129,13 @@ def main():
     if path:
         print([s.position for s in path])
     print("min cost: " + str(min_cost))
+    end = time.time()
+    total_time = end - start
+    print("\n" + str(total_time))
 
     ###Animation Call###
     vis = visualization.animated_path(GRID, clv_list, path, start_s, goal_s)
     vis.start_animation()
-    end = time.time()
-    total_time = end - start
-    print("\n" + str(total_time))
 
 
 if __name__ == "__main__":

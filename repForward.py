@@ -3,7 +3,7 @@ from main import n, state, actions, OPEN_LIST, CLOSED_LIST, clv_list
 import numpy as np
 
 
-def a_star(start_s, goal_s):
+def a_star(start_s, goal_s, GRID):
 
     heappush(OPEN_LIST, (start_s.f, start_s))
 
@@ -17,7 +17,7 @@ def a_star(start_s, goal_s):
             return create_path(curr_s)
         # for each neighbor of current node
         for a in actions:
-            succ_s = succ(curr_s, a)
+            succ_s = succ(curr_s, a, GRID)
             if succ_s is None:
                 continue
             else:
@@ -37,9 +37,6 @@ def a_star(start_s, goal_s):
                             break
                     else:
                         heappush(OPEN_LIST, (succ_s.f, succ_s))
-    # print("No valid path found.")
-    return None, None
-
 
 def create_path(curr_s):
     path = []
@@ -53,7 +50,7 @@ def create_path(curr_s):
 # function for generating successor state s based on action a
 
 
-def succ(curr_s, a):
+def succ(curr_s, a, GRID):
     x = curr_s.position[0]
     y = curr_s.position[1]
     if a == "up" and x > 0 and GRID[x-1][y] == 0:

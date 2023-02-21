@@ -13,11 +13,12 @@ class forstate(state):
 def a_star(start_s, goal_s, GRID):
     c = n*n
     heappush(OPEN_LIST, (c*start_s.f-start_s.g, start_s))
+    open_dict = {start_s: c*start_s.f-start_s.g}
 
     while OPEN_LIST:
         # identify s with smallest f-value
         curr_f, curr_s = heappop(OPEN_LIST)
-
+        del open_dict[curr_s]
         CLOSED_LIST.add(curr_s)
         clv_list.append(curr_s)
         # found path from start to destination
@@ -37,15 +38,14 @@ def a_star(start_s, goal_s, GRID):
                     succ_s.g = new_g
                     succ_s.h = calc_h(succ_s.position, goal_s.position)
                     succ_s.f = succ_s.g + succ_s.h
-                    for open_s in OPEN_LIST:
-                        if open_s[1] == succ_s:
-                            if open_s[0] > c*succ_s.f-succ_s.g:
-                                OPEN_LIST.remove(open_s)
-                                heappush(
-                                    OPEN_LIST, (c*succ_s.f-succ_s.g, succ_s))
-                            break
-                    else:
-                        heappush(OPEN_LIST, (c*succ_s.f-succ_s.g, succ_s))
+                    # check if the state is in the OPEN_LIST
+                    if succ_s in open_dict:
+                        if open_dict[succ_s] <= c*succ_s.f-succ_s.g:
+                            continue
+                        del OPEN_LIST[OPEN_LIST.index(
+                            (open_dict[succ_s], succ_s))]
+                    heappush(OPEN_LIST, (c*succ_s.f-succ_s.g, succ_s))
+                    open_dict[succ_s] = c*succ_s.f-succ_s.g
     return None, None
 
 

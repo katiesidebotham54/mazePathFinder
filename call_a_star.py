@@ -42,8 +42,8 @@ def call_a_star(a_star, GRID):
 
 for maze in mazes:
     # call_a_star(repForward.a_star, maze)
-    # call_a_star(repBack.a_star, maze)
-    call_a_star(repForLarge.a_star, maze)
+    call_a_star(repBack.a_star, maze)
+    # call_a_star(repForLarge.a_star, maze)
     # call_a_star(repForSmall.a_star, maze)
     # call_a_star(adaptiveA.a_star, maze)
 

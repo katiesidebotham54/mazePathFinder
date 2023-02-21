@@ -36,13 +36,13 @@ def call_a_star(a_star, GRID):
     # print("\n" + str(total_time))
 
     #Animation Call###
-    # vis = visualization.animated_path(GRID, clv_list, path, start_s, goal_s)
-    # vis.start_animation()
+    vis = visualization.animated_path(GRID, clv_list, path, start_s, goal_s)
+    vis.start_single_animation()
 
 
-for maze in mazes:
+# for maze in mazes:
     # call_a_star(repForward.a_star, maze)
-    call_a_star(repBack.a_star, maze)
+call_a_star(repBack.a_star, mazes[0])
     # call_a_star(repForLarge.a_star, maze)
     # call_a_star(repForSmall.a_star, maze)
     # call_a_star(adaptiveA.a_star, maze)

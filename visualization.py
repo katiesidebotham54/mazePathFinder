@@ -68,7 +68,25 @@ class animated_path():
         plt.imshow(self.clv, alpha=.5, cmap='Wistia')
         plt.imshow(self.pv, alpha=1, cmap='cool')
 
-    def start_animation(self):
-        anim = animation.FuncAnimation(self.fig, self.animate, frames=len(
+    def start_single_animation(self):
+        self.anim = animation.FuncAnimation(self.fig, self.animate, frames=len(
             self.closed_list) + len(self.path), interval=self.interval)
         plt.show()
+
+class repeated_animated_path():
+
+    def __init__(self, animated_path_list):
+
+        self.maze = animated_path_list[0].maze
+        self.start_s = animated_path_list[0].start_s
+        self.goal_s = animated_path_list[0].goal_s
+
+        if path_list:
+            self.path_list = [animated_path_list[x].path for x in animated_path_list]
+        else:
+            self.path_list = [[]]
+
+        if closed_list_list:
+            self.closed_list_list = [animated_path_list[x].closed_list for x in animated_path_list]
+        else:
+            self.closed_list_list = [[]]

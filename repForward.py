@@ -1,5 +1,5 @@
 from heapq import heappush, heappop
-from main import n, GRID, state, actions, OPEN_LIST, CLOSED_LIST, clv_list
+from main import n, state, actions, OPEN_LIST, CLOSED_LIST, clv_list
 import numpy as np
 
 

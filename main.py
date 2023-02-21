@@ -1,6 +1,9 @@
 from generate_maze import generate_maze
 import numpy as np
 
+# state object for holding position, parent, g, h, and f values of a state
+# includes an equals, hash, and less than comparison function
+
 
 class state():
     def __init__(self, parent=None, position=None):
@@ -22,13 +25,9 @@ class state():
 
 # Grid Dimensions
 n = 101
-# Grid
 mazes = [generate_maze(n) for i in range(50)]
 # Store the mazes in a numpy array
 mazes = np.array(mazes)
-# for visualization purposes
-GRID = mazes[0]
-
 # priority queue which contains only the start state initially, keeps track of all nodes to be visited --> binary heap using python libraries
 # holds tuple (f-value, s)
 OPEN_LIST = []

@@ -1,5 +1,5 @@
 from heapq import heappush, heappop
-from main import n, GRID, state, actions, OPEN_LIST, CLOSED_LIST, clv_list
+from main import n, state, actions, OPEN_LIST, CLOSED_LIST, clv_list
 
 
 class forstate(state):
@@ -10,7 +10,7 @@ class forstate(state):
         return self.f < other.f
 
 
-def a_star(start_s, goal_s):
+def a_star(start_s, goal_s, GRID):
     c = n*n
     heappush(OPEN_LIST, (c*start_s.f-start_s.g, start_s))
 
@@ -25,7 +25,7 @@ def a_star(start_s, goal_s):
             return create_path(curr_s)
         # for each neighbor of current node
         for a in actions:
-            succ_s = succ(curr_s, a)
+            succ_s = succ(curr_s, a, GRID)
             if succ_s is None:
                 continue
             else:
@@ -61,7 +61,7 @@ def create_path(curr_s):
 # function for generating successor state s based on action a
 
 
-def succ(curr_s, a):
+def succ(curr_s, a, GRID):
     x = curr_s.position[0]
     y = curr_s.position[1]
     if a == "up" and x > 0 and GRID[x-1][y] == 0:

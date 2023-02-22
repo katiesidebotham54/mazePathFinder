@@ -19,7 +19,7 @@ class animated_path():
         self.closed_list = closed_list
         if self.closed_list:
             self.c_max_g = max([state.g for state in self.closed_list])
-            
+
         self.clv = np.zeros(maze.shape, dtype=float)
         self.clv = np.ma.masked_where(self.clv == 0, self.clv)
 
@@ -41,9 +41,8 @@ class animated_path():
 
             if self.c_max_g != 0:
 
-                self.clv[self.closed_list[i].position[0]]\
-                [self.closed_list[i].position[1]] \
-                = self.closed_list[i].g / self.c_max_g
+                self.clv[self.closed_list[i].position[0]][self.closed_list[i].position[1]] \
+                    = self.closed_list[i].g / self.c_max_g
 
             else:
 
@@ -77,6 +76,7 @@ class animated_path():
             self.closed_list) + len(self.path), interval=self.interval)
         plt.show()
 
+
 class repeated_animated_path():
 
     def __init__(self, animated_path_dict):
@@ -91,20 +91,20 @@ class repeated_animated_path():
 
     def repeated_animate(self, i):
 
-        #Termination Sequence
+        # Termination Sequence
         if i == self.final_threshold:
             print('.', end='')
             return
 
-        #Have we reached the end of this a*?
-        if i == sum([(len(y.path) + len(y.closed_list))\
+        # Have we reached the end of this a*?
+        if i == sum([(len(y.path) + len(y.closed_list))
                     for y in self.animated_path_list[:1 + self.x]]):
 
             self.x += 1
 
-        #Subtracting previous a* lengths from i
-        i -= sum([(len(y.path) + len(y.closed_list))\
-                    for y in self.animated_path_list[:self.x]])
+        # Subtracting previous a* lengths from i
+        i -= sum([(len(y.path) + len(y.closed_list))
+                  for y in self.animated_path_list[:self.x]])
 
         anim = self.animated_path_list[self.x]
 
@@ -113,17 +113,19 @@ class repeated_animated_path():
             if anim.c_max_g != 0:
 
                 anim.clv[anim.closed_list[i].position[0]][anim.closed_list[i].position[1]] = \
-                anim.closed_list[i].g / anim.c_max_g
+                    anim.closed_list[i].g / anim.c_max_g
 
             else:
 
-                anim.clv[anim.closed_list[i].position[0]][anim.closed_list[i].position[1]] = 1
+                anim.clv[anim.closed_list[i].position[0]
+                         ][anim.closed_list[i].position[1]] = 1
 
         elif i - len(anim.closed_list) < len(anim.path):
 
             i -= len(anim.closed_list)
 
-            anim.pv[anim.path[i].position[0]][anim.path[i].position[1]] = i / len(anim.path)
+            anim.pv[anim.path[i].position[0]
+                    ][anim.path[i].position[1]] = i / len(anim.path)
 
         # Show
         self.ax.clear()
@@ -134,7 +136,9 @@ class repeated_animated_path():
         plt.title(self.algorithm_names[self.x])
 
     def start_repeated_animate(self):
-        self.final_threshold = sum([(len(y.path) + len(y.closed_list)) for y in self.animated_path_list])
-        self.anim = animation.FuncAnimation(self.fig, self.repeated_animate, interval = 50)
+        self.final_threshold = sum(
+            [(len(y.path) + len(y.closed_list)) for y in self.animated_path_list])
+        self.anim = animation.FuncAnimation(
+            self.fig, self.repeated_animate, interval=50)
         plt.show()
         self.x = 0

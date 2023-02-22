@@ -58,7 +58,6 @@ def a_star(start_s, goal_s, GRID):
                 OPEN_LIST[i] = (open_s.g + new_h, open_s)
                 heapify(OPEN_LIST)
     if min_cost == float('inf'):
-        # print("No valid path found.")
         return None, None
 
 

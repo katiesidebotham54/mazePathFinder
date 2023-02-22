@@ -1,5 +1,4 @@
-from generate_maze import generate_maze
-import numpy as np
+import test
 
 # state object for holding position, parent, g, h, and f values of a state
 # includes an equals, hash, and less than comparison function
@@ -24,10 +23,9 @@ class state():
 
 
 # Grid Dimensions
-n = 101
-mazes = [generate_maze(n) for i in range(50)]
-# Store the mazes in a numpy array
-mazes = np.array(mazes)
+n = 10
+maze = test.test_maze
+
 # priority queue which contains only the start state initially, keeps track of all nodes to be visited --> binary heap using python libraries
 # holds tuple (f-value, s)
 OPEN_LIST = []

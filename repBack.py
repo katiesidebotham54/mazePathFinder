@@ -1,5 +1,5 @@
 from heapq import heappush, heappop
-from main import n, state, actions, OPEN_LIST, CLOSED_LIST, clv_list
+from main import state, actions, OPEN_LIST, CLOSED_LIST, clv_list
 
 
 def a_star(goal_s, start_s, GRID):
@@ -62,7 +62,7 @@ def succ(curr_s, a, GRID):
         succ_s = state(curr_s, (x-1, y))
         return succ_s
 
-    elif a == "down" and x < n-1 and GRID[x+1][y] == 0:
+    elif a == "down" and x < len(GRID)-1 and GRID[x+1][y] == 0:
         succ_s = state(curr_s, (x+1, y))
         return succ_s
 
@@ -70,7 +70,7 @@ def succ(curr_s, a, GRID):
         succ_s = state(curr_s, (x, y-1))
         return succ_s
 
-    elif a == "right" and y < n-1 and GRID[x][y+1] == 0:
+    elif a == "right" and y < len(GRID)-1 and GRID[x][y+1] == 0:
         succ_s = state(curr_s, (x, y+1))
         return succ_s
 

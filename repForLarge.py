@@ -1,5 +1,5 @@
 from heapq import heappush, heappop
-from main import n, state, actions, OPEN_LIST, CLOSED_LIST, clv_list
+from main import state, actions, OPEN_LIST, CLOSED_LIST, clv_list
 
 
 class forstate(state):
@@ -11,6 +11,7 @@ class forstate(state):
 
 
 def a_star(start_s, goal_s, GRID):
+    n = len(GRID)
     # constant c to account for same f values
     c = (-n)*n
     heappush(OPEN_LIST, (c*start_s.f-start_s.g, start_s))
@@ -73,7 +74,7 @@ def succ(curr_s, a, GRID):
         succ_s = forstate(curr_s, (x-1, y))
         return succ_s
 
-    elif a == "down" and x < n-1 and GRID[x+1][y] == 0:
+    elif a == "down" and x < len(GRID)-1 and GRID[x+1][y] == 0:
         succ_s = forstate(curr_s, (x+1, y))
         return succ_s
 
@@ -81,7 +82,7 @@ def succ(curr_s, a, GRID):
         succ_s = forstate(curr_s, (x, y-1))
         return succ_s
 
-    elif a == "right" and y < n-1 and GRID[x][y+1] == 0:
+    elif a == "right" and y < len(GRID)-1 and GRID[x][y+1] == 0:
         succ_s = forstate(curr_s, (x, y+1))
         return succ_s
 

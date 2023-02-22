@@ -1,6 +1,5 @@
 from heapq import heappush, heappop
 from main import n, state, actions, OPEN_LIST, CLOSED_LIST, clv_list
-import numpy as np
 
 
 def a_star(goal_s, start_s, GRID):

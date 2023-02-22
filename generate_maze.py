@@ -63,4 +63,6 @@ def generate_maze(n):
             stack.append((next_i, next_j))
         else:
             stack.pop()
+    maze[0][0] = 0
+    maze[n-1][n-1] = 0
     return maze

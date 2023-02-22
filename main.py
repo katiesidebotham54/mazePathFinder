@@ -41,5 +41,4 @@ OPEN_LIST = []
 CLOSED_LIST = set()
 # array of potential actions taken by state s on grid
 clv_list = []
-
 actions = ["up", "down", "left", "right"]

@@ -3,9 +3,7 @@ import repBack
 import repForLarge
 import repForSmall
 import adaptiveA
-from main import state, OPEN_LIST, CLOSED_LIST, clv_list
-# from main import mazes
-from main import maze
+from main import state, OPEN_LIST, CLOSED_LIST, clv_list, maze
 import visualization
 import time
 
@@ -34,26 +32,26 @@ def call_a_star(a_star, GRID):
     #     print([s.position for s in path])
     end = time.time()
     total_time = end - start
-    # runtimes.append(total_time)
+    runtimes.append(total_time)
     # print("\n" + str(total_time))
+    ### Single Animation Call ###
+    # vis = visualization.animated_path(GRID, clv_list, path, start_s, goal_s)
+    # vis.start_single_animation()
+    return visualization.animated_path(GRID, clv_list, path, start_s, goal_s)
 
-    # Animation Call
-    vis = visualization.animated_path(GRID, clv_list, path, start_s, goal_s)
-    vis.start_animation()
+animated_path_dict = \
+{"Repeated Forward": call_a_star(repForward.a_star, maze),\
+"Repeated Backward": call_a_star(repBack.a_star, maze),\
+"Repeated For Large": call_a_star(repForLarge.a_star, maze),\
+"Repeated For Small": call_a_star(repForSmall.a_star, maze),\
+"Adaptive": call_a_star(adaptiveA.a_star, maze)}\
 
+x = visualization.repeated_animated_path(animated_path_dict)
+x.start_repeated_animate()
 
-# for maze in mazes:
-# call_a_star(repForward.a_star, maze)
-# call_a_star(repBack.a_star, maze)
-# call_a_star(repForLarge.a_star, maze)
-# call_a_star(repForSmall.a_star, maze)
-call_a_star(adaptiveA.a_star, maze)
+for i in runtimes:
+    print("runtime: " + str(i))
+    runtime_sum += i
 
-
-# ********REMOVE FOR TESTING***********
-# for i in runtimes:
-#     print("runtime: " + str(i))
-#     runtime_sum += i
-
-# average_runtime = runtime_sum / ITERATIONS
-# print("average runtime: " + str(average_runtime))
+average_runtime = runtime_sum / ITERATIONS
+print("average runtime: " + str(average_runtime))

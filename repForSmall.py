@@ -11,6 +11,7 @@ class forstate(state):
 
 
 def a_star(start_s, goal_s, GRID):
+    # constant c to account for same f values
     c = n*n
     heappush(OPEN_LIST, (c*start_s.f-start_s.g, start_s))
     open_dict = {start_s: c*start_s.f-start_s.g}
@@ -19,6 +20,7 @@ def a_star(start_s, goal_s, GRID):
         # identify s with smallest f-value
         curr_f, curr_s = heappop(OPEN_LIST)
         del open_dict[curr_s]
+        # add state into closed list to expand
         CLOSED_LIST.add(curr_s)
         clv_list.append(curr_s)
         # found path from start to destination
@@ -27,7 +29,7 @@ def a_star(start_s, goal_s, GRID):
         # for each neighbor of current node
         for a in actions:
             succ_s = succ(curr_s, a, GRID)
-            if succ_s is None:
+            if succ_s is None:  # neighbor is an obstacle or out of bounds
                 continue
             else:
                 new_g = curr_s.g + 1

@@ -12,6 +12,7 @@ def a_star(goal_s, start_s, GRID):
         # identify s with smallest f-value
         curr_f, curr_s = heappop(OPEN_LIST)
         del open_dict[curr_s]
+        # add state into closed list to expand
         CLOSED_LIST.add(curr_s)
         clv_list.append(curr_s)
         # found path from start to destination
@@ -19,12 +20,13 @@ def a_star(goal_s, start_s, GRID):
             return create_path(curr_s)
         # for each neighbor of current node
         for a in actions:
+            # create state object for neighbor
             succ_s = succ(curr_s, a, GRID)
-            if succ_s is None:
+            if succ_s is None:  # neighbor is an obstacle or out of bounds
                 continue
             else:
                 new_g = curr_s.g + 1
-                for closed_s in CLOSED_LIST:
+                for closed_s in CLOSED_LIST:  # if neighbor has already been visited
                     if closed_s == succ_s:
                         break
                 else:

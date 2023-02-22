@@ -10,6 +10,7 @@ class forstate(state):
 
 
 def a_star(start_s, goal_s, GRID):
+    # constant c to account for same f values
     c = (-n)*n
     heappush(OPEN_LIST, (c*start_s.f-start_s.g, start_s))
     g_values = {}
@@ -29,16 +30,16 @@ def a_star(start_s, goal_s, GRID):
             return create_path(curr_s)
 
         for a in actions:
-
+            # create state object for neighbor
             succ_s = succ(curr_s, a, GRID)
-            if succ_s is None:
+            if succ_s is None:  # neighbor is an obstacle or out of bounds
                 continue
             # update the h-value if a lower g-value is found
             if succ_s in g_values and g_values[succ_s] <= curr_s.g:
                 continue
             else:
                 succ_s.g = curr_s.g + 1
-                succ_s.h = heuristic(succ_s.position, goal_s.position)
+                succ_s.h = calc_h(succ_s.position, goal_s.position)
                 succ_s.f = succ_s.g + succ_s.h
                 # check if the state is in the OPEN_LIST
                 if succ_s in open_dict:
@@ -51,7 +52,7 @@ def a_star(start_s, goal_s, GRID):
             open_f, open_s = OPEN_LIST[i]
             if open_s not in g_values:
                 continue
-            new_h = heuristic(open_s.position, goal_s.position) + \
+            new_h = calc_h(open_s.position, goal_s.position) + \
                 g_values[open_s] - start_s.g
             if new_h < open_s.h:
                 OPEN_LIST[i] = (open_s.g + new_h, open_s)
@@ -97,7 +98,3 @@ def succ(curr_s, a, GRID):
 
 def calc_h(a, b):
     return abs(a[0] - b[0]) + abs(a[1] - b[1])
-
-
-def heuristic(pos, goal):
-    return calc_h(pos, goal)

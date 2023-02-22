@@ -69,13 +69,13 @@ class animated_path():
         plt.imshow(self.pv, alpha=1, cmap='cool')
 
     def start_single_animation(self):
-        self.fig, self.axs = plt.subplots(5)
+        self.fig, self.axs = plt.subplots()
         plt.tick_params(left=False, right=False, labelleft=False,
                         labelbottom=False, bottom=False)
         self.interval = 1 / self.maze.shape[0]
         self.anim = animation.FuncAnimation(self.fig, self.animate, frames=len(
             self.closed_list) + len(self.path), interval=self.interval)
-        # plt.show()
+        plt.show()
 
 class repeated_animated_path():
 

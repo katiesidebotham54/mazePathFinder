@@ -26,10 +26,10 @@ class state():
 
 # ************TESTING****************
 # n = 10
-# maze = test.test_maze
+maze = test.test_maze
 
 # Grid Dimensions
-n = 101
+n = 10
 mazes = [generate_maze(n) for i in range(50)]
 # Store the mazes in a numpy array
 mazes = np.array(mazes)

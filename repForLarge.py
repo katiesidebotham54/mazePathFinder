@@ -51,6 +51,8 @@ def a_star(start_s, goal_s, GRID):
                     open_dict[succ_s] = c*succ_s.f-succ_s.g
     return None, None
 
+# function for generating h based on manhattan distances
+
 
 def create_path(curr_s):
     path = []

@@ -25,15 +25,14 @@ class state():
 
 
 # ************TESTING****************
-n = 10
-maze = test.test_maze
+# n = 10
+# maze = test.test_maze
 
-
-# # Grid Dimensions
-# n = 101
-# mazes = [generate_maze(n) for i in range(50)]
-# # # Store the mazes in a numpy array
-# mazes = np.array(mazes)
+# Grid Dimensions
+n = 101
+mazes = [generate_maze(n) for i in range(50)]
+# Store the mazes in a numpy array
+mazes = np.array(mazes)
 # priority queue which contains only the start state initially, keeps track of all nodes to be visited --> binary heap using python libraries
 # holds tuple (f-value, s)
 OPEN_LIST = []

@@ -95,6 +95,8 @@ def succ(curr_s, a, GRID):
 
     return None
 
+# function for generating h based on manhattan distances
+
 
 def calc_h(a, b):
     return abs(a[0] - b[0]) + abs(a[1] - b[1])

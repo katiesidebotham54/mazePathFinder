@@ -24,10 +24,11 @@ class state():
 
 
 # Grid Dimensions
-n = 101
+n = 11
 mazes = [generate_maze(n) for i in range(50)]
 # Store the mazes in a numpy array
 mazes = np.array(mazes)
+test_maze = generate_maze(n)
 # priority queue which contains only the start state initially, keeps track of all nodes to be visited --> binary heap using python libraries
 # holds tuple (f-value, s)
 OPEN_LIST = []

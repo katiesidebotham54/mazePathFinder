@@ -2,7 +2,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 from IPython import display
-import time
 
 
 class animated_path():
@@ -16,7 +15,7 @@ class animated_path():
         self.closed_list = closed_list
         if self.closed_list:
             self.c_max_g = max([state.g for state in self.closed_list])
-            
+
         self.clv = np.zeros(maze.shape, dtype=float)
         self.clv = np.ma.masked_where(self.clv == 0, self.clv)
 
@@ -34,7 +33,7 @@ class animated_path():
         self.fig, self.ax = plt.subplots()
         plt.tick_params(left=False, right=False, labelleft=False,
                         labelbottom=False, bottom=False)
-        self.interval = 100 / maze.shape[0]
+        self.interval = 30 / maze.shape[0]
 
     def animate(self, i):
 

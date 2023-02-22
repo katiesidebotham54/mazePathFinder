@@ -8,29 +8,30 @@ class forstate(state):
             return self.g > other.g
         return self.f < other.f
 
-def a_star(start_s, goal_s,GRID):
-    c = -1 
+
+def a_star(start_s, goal_s, GRID):
+    c = (-n)*n
     heappush(OPEN_LIST, (c*start_s.f-start_s.g, start_s))
-    g_values = {}  
-    open_dict = {start_s: c*start_s.f-start_s.g} 
-    min_cost = float('inf') 
+    g_values = {}
+    open_dict = {start_s: c*start_s.f-start_s.g}
+    min_cost = float('inf')
 
     while OPEN_LIST:
         curr_f, curr_s = heappop(OPEN_LIST)
-        del open_dict[curr_s] 
-        CLOSED_LIST.add(curr_s) 
+        del open_dict[curr_s]
+        CLOSED_LIST.add(curr_s)
         clv_list.append(curr_s)
         g_values[curr_s] = curr_s.g
-    
+
         if curr_s == goal_s:
             if curr_s.g < min_cost:
                 min_cost = curr_s.g
-            return create_path(curr_s) 
-  
+            return create_path(curr_s)
+
         for a in actions:
-            
-            succ_s = succ(curr_s, a,GRID)
-            if succ_s is None:  
+
+            succ_s = succ(curr_s, a, GRID)
+            if succ_s is None:
                 continue
             # update the h-value if a lower g-value is found
             if succ_s in g_values and g_values[succ_s] <= curr_s.g:
@@ -45,7 +46,7 @@ def a_star(start_s, goal_s,GRID):
                         continue
                     del OPEN_LIST[OPEN_LIST.index((open_dict[succ_s], succ_s))]
                 heappush(OPEN_LIST, (c*succ_s.f-succ_s.g, succ_s))
-                open_dict[succ_s] = c*succ_s.f-succ_s.g 
+                open_dict[succ_s] = c*succ_s.f-succ_s.g
         for i in range(len(OPEN_LIST)):
             open_f, open_s = OPEN_LIST[i]
             if open_s not in g_values:
@@ -58,6 +59,7 @@ def a_star(start_s, goal_s,GRID):
     if min_cost == float('inf'):
         # print("No valid path found.")
         return None, None
+
 
 def create_path(curr_s):
     path = []

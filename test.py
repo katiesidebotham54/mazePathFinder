@@ -4,8 +4,8 @@ test_maze = np.zeros((10, 10), dtype=int)
 
 test_maze[0][0] = 0
 test_maze[0][1] = 0
-test_maze[0][2] = 1
-test_maze[0][3] = 1
+test_maze[0][2] = 0
+test_maze[0][3] = 0
 test_maze[0][4] = 0
 test_maze[0][5] = 0
 test_maze[0][6] = 0
@@ -28,7 +28,7 @@ test_maze[2][0] = 0
 test_maze[2][1] = 1
 test_maze[2][2] = 0
 test_maze[2][3] = 0
-test_maze[2][4] = 1
+test_maze[2][4] = 0
 test_maze[2][5] = 0
 test_maze[2][6] = 1
 test_maze[2][7] = 0
@@ -41,9 +41,9 @@ test_maze[3][2] = 0
 test_maze[3][3] = 0
 test_maze[3][4] = 0
 test_maze[3][5] = 0
-test_maze[3][6] = 1
+test_maze[3][6] = 0
 test_maze[3][7] = 0
-test_maze[3][8] = 1
+test_maze[3][8] = 0
 test_maze[3][9] = 0
 
 test_maze[4][0] = 0
@@ -98,7 +98,7 @@ test_maze[8][4] = 0
 test_maze[8][5] = 0
 test_maze[8][6] = 0
 test_maze[8][7] = 0
-test_maze[8][8] = 1
+test_maze[8][8] = 0
 test_maze[8][9] = 0
 
 test_maze[9][0] = 0

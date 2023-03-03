@@ -26,7 +26,8 @@ def call_a_star(a_star, GRID):
     path, min_cost = a_star(start_s, goal_s, GRID)
     end = time.time()
     total_time = end - start
-
+    if a_star == repBack.a_star:
+        clv_list.reverse()
     copy_clv_list = clv_list.copy()
     return visualization.animated_path(GRID, copy_clv_list, path, start_s, goal_s)
 

@@ -26,8 +26,8 @@ def call_a_star(a_star, GRID):
     CLOSED_LIST.clear()
     clv_list.clear()
     path, min_cost = a_star(start_s, goal_s, GRID)
-    # if path:
-    #     print([s.position for s in path])
+    if path:
+        print([s.position for s in path])
     end = time.time()
     total_time = end - start
     runtime_sum = 0
@@ -40,8 +40,8 @@ def call_a_star(a_star, GRID):
 
 
 for maze in mazes:
-    call_a_star(repForward.a_star, maze)
+    # call_a_star(repForward.a_star, maze)
     call_a_star(repBack.a_star, maze)
-    call_a_star(repForLarge.a_star, maze)
-    call_a_star(repForSmall.a_star, maze)
-    call_a_star(adaptiveA.a_star, maze)
+    # call_a_star(repForLarge.a_star, maze)
+    # call_a_star(repForSmall.a_star, maze)
+    # call_a_star(adaptiveA.a_star, maze)

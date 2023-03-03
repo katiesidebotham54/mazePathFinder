@@ -49,7 +49,6 @@ def create_path(curr_s):
     while s is not None:
         path.append(s)
         s = s.parent
-    path.reverse()
     return path, curr_s.g
 
 # function for generating successor state s based on action a
